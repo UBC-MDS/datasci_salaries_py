@@ -14,7 +14,9 @@ To populate our dashboard, we will be using the [Kaggle Data Scientists Salaries
 
 - **FormalEducation** - The level of formal education attained (ordinal with 7 levels: (1) Doctoral degree, (2) Master's degree, (3) Bachelor's degree, (4) Professional degree, (5) Some college/university study without earning a bachelor's degree, (6) I did not complete any formal education past high school, and (7) I prefer not to answer).
 
-To see the other features in the dataset, please see.
+- **RemoteWork** - How often the data scientist works remotely (ordinal with 6 levels: (1) Always, (2) Most of the time, (3) Sometimes, (4) Rarely, (5) Never, (6) Don't know)
+
+To see the other features in the dataset, please see `data/schema.csv`.
 ### Research Questions and Usage Scenarios
 
 #### Usage Scenario: 
