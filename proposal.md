@@ -14,7 +14,17 @@ To populate our dashboard, we will be using the [Kaggle Data Scientists Salaries
 
 - **FormalEducation** - The level of formal education attained (ordinal with 7 levels: (1) Doctoral degree, (2) Master's degree, (3) Bachelor's degree, (4) Professional degree, (5) Some college/university study without earning a bachelor's degree, (6) I did not complete any formal education past high school, and (7) I prefer not to answer).
 
-To see the other features in the dataset, please see.
+- **RemoteWork** - How often the data scientist works remotely (ordinal with 6 levels: (1) Always, (2) Most of the time, (3) Sometimes, (4) Rarely, (5) Never, (6) Don't know)
+
+To see the other features in the dataset, please see `data/schema.csv`.
+
 ### Research Questions and Usage Scenarios
 
-#### Usage Scenario: 
+Our app will provide answers to two research questions:
+
+- How is the level of formal education (e.g. bachelor's, master's degree etc.) associated with a data scientist's salary?
+- Data Science professionals in which countries are paid the highest?
+
+#### Usage Scenario
+
+Heroku is a UBC Master of Data Science student who will be graduating in July and will be starting his job hunt next month. He is overwhelmed by the options that he has in front of him and wants to [compare] salaries in his home country to Canada to decide whether he should rather be focusing his energy on finding job in Canada or The States. He is mostly concerned with the range of salary that he should be expecting in a certain country and wants to [explore] salary expectations for new graduates. His priority is to work remotely, but he is afraid he might need to be asking for less salary if he is working remotely. He needs to know how remote Data Science jobs [compare] to in-person jobs. Using the Data Science Salaries dashboard, he will be able to [explore] salary ranges per age and gender. If not happy with the salary ranges, he has the option to [explore] if doing a PHD can increase his salary.
