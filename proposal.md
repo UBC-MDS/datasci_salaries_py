@@ -2,6 +2,12 @@
 
 ### Motivation and Purpose
 
+- Our role: Data scientist research team
+- Target audience: Newly graduated data science students
+
+The knowledge gap over salaries in the field of data science has been one of the challenges for graduates with different education levels around the world. Understanding the salary levels can help keep appropriate expectations for people who are considering getting into the field or seeking related jobs. To achieve this purpose, we plan to build an application which provides reliable information and visualizations of data science salary levels around the world for those who need it.
+
+
 ### Description of the Data
 
 To populate our dashboard, we will be using the [Kaggle Data Scientists Salaries Around the World](https://www.kaggle.com/ikleiman/data-scientists-salaries-around-the-world) by [Iair Kleiman](https://www.kaggle.com/ikleiman). Specifically, the files `conversionRates.csv` and `multipleChoiceResponses.csv` are used in this project. The data is processed using `scripts/data_cleaning.R` to mainly remove rows that do not have salary data, and to convert all salaries to USD from the respective countries' currencies. After data wrangling, the tidy dataset contains information about data scientist salaries in USD in 2018 for 43 different countries with the following features of interest:
