@@ -20,7 +20,7 @@ To see the other features in the dataset, please see.
 
 Our app will provide answers to two research questions:
 
-- What Data Science related job titles are more popular in each country and how much they pay on average?
+- How is the level of formal education (e.g. bachelor's, master's degree etc.) associated with a data scientist's salary?
 - Data Science professionals in which countries are paid the highest?
 
 #### Usage Scenario
