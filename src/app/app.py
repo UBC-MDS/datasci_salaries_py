@@ -11,7 +11,7 @@ from dash.dependencies import Input, Output
 import sys
 sys.path.append("./app")
 from layout import *
-from plot_copy import *
+from plot import *
 
 app = dash.Dash(__name__, external_stylesheets = [dbc.themes.BOOTSTRAP, '/css/button.css'])
 
@@ -39,46 +39,46 @@ def update(DS_identity):
     rst = plot_13(DS_identity)
     return rst
 
-@app.callback(
-    Output("f11", "srcDoc"),
-    Output("f22", "srcDoc"),
-    Output('boxplot', 'srcDoc'),
-    Output("f21", "srcDoc"),
-    [Input('xslider_1', 'value')]
-)
-def update(value):
-    return plot(value)
-
-
-
 # @app.callback(
 #     Output("f11", "srcDoc"),
-#     [Input('select-country', 'value')]
-# )
-# def update(xmax):
-#     return plot_11(xmax)
-
-# @app.callback(
 #     Output("f22", "srcDoc"),
-#     [Input('xslider_1', 'value'), Input('select-country', 'value')]
-# )
-# def update(xmax, con):
-#     return plot_22(xmax, con)
-
-# @app.callback(
 #     Output('boxplot', 'srcDoc'),
-#     [Input('select-country', 'value')]
-# )
-# def update(xmax):
-#     return plot_12(xmax)
-
-
-# @app.callback(
 #     Output("f21", "srcDoc"),
-#     [Input('select-country', 'value')]
+#     [Input('xslider_1', 'value')]
 # )
-# def update(xmax):
-#     return plot_21(xmax)
+# def update(value):
+#     return plot(value)
+
+
+
+@app.callback(
+    Output("f11", "srcDoc"),
+    [Input('select-country', 'value')]
+)
+def update(xmax):
+    return plot_11(xmax)
+
+@app.callback(
+    Output("f22", "srcDoc"),
+    [Input('xslider_1', 'value'), Input('select-country', 'value')]
+)
+def update(xmax, con):
+    return plot_22(xmax, con)
+
+@app.callback(
+    Output('boxplot', 'srcDoc'),
+    [Input('select-country', 'value')]
+)
+def update(xmax):
+    return plot_12(xmax)
+
+
+@app.callback(
+    Output("f21", "srcDoc"),
+    [Input('select-country', 'value')]
+)
+def update(xmax):
+    return plot_21(xmax)
 
 
 if __name__ == '__main__':

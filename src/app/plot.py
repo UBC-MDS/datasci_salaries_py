@@ -9,9 +9,12 @@ data = pd.read_csv("./../../data/processed/cleaned_salaries.csv")
 
 def plot_22(xmax, con):
     
-
     source = data[(data["Age"]>0) & (data["Salary_USD"]<=xmax[1])]
-    source = source[source["Country"] == con]
+    if con == "World" or con is None:
+        pass
+    else:
+        source = source[source["Country"] == con]
+
     
     alt.themes.enable("default")
 
@@ -22,7 +25,7 @@ def plot_22(xmax, con):
         tooltip='count()',
         color=alt.Color('count()',scale=alt.Scale(scheme='greenblue'), legend=alt.Legend(title='Tot. Records')),
     ).properties(
-        title = "Rect plot by Wenjia",
+        title = "Heatmap of selected country",
         width=335,
         height=270,
     )
@@ -32,7 +35,7 @@ def plot_22(xmax, con):
         y='count()',
     ).properties(
         width=335,
-        height=200,
+        height=170,
     )
     
     fchart = alt.vconcat(chart, bar, spacing=0)
@@ -43,7 +46,11 @@ def plot_22(xmax, con):
 def plot_12(xcon):
     
     genders = ['Male', 'Female', 'A different identity']
-    source = data[(data["Country"] == xcon) & (data["GenderSelect"].isin(genders))]
+    if xcon == "World" or xcon is None:
+        source = data[data["GenderSelect"].isin(genders)]
+    else:
+        source = data[(data["Country"] == xcon) & (data["GenderSelect"].isin(genders))]
+        
     chart = alt.Chart(source).mark_boxplot().encode(
         x=alt.X("Salary_USD:Q", 
                 title="Salary in USD", 
@@ -69,7 +76,7 @@ def plot_21(value):
     education_order = ["Less than bachelor's degree", "Bachelor's degree", 
                        "Master's degree", "Doctoral degree"]
     
-    if value == "World":
+    if value == "World" or value is None:
         country = data
     else:
         country = data.query("Country == @value")
@@ -102,7 +109,7 @@ def plot_21(value):
     return chart.to_html()
 
 
-def plot_11(xmax="World"):
+def plot_11(xmax):
     
     world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
     world["name"] = world["name"].apply(lambda x:str.lower(" ".join(x.split(" ")[0:2])))
@@ -122,7 +129,7 @@ def plot_11(xmax="World"):
         tooltip=['name:N', 'Salary_USD:Q', "alpha:Q"]
     )
     
-    if xmax != "World":
+    if xmax is not None:
         datamap["alpha"] = 1
         datamap.loc[datamap["name"] == xmax.lower(), "alpha"] = 100
         chart = chart.encode(

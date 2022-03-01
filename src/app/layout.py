@@ -5,7 +5,7 @@ import dash_bootstrap_components as dbc
 import dash_alternative_viz as dav
 from dash.dependencies import Input, Output
 
-from plot_copy import *
+from plot import *
 
 SIDEBAR_STYLE = {
     "position": "fixed",
@@ -37,7 +37,7 @@ CONTENT_STYLE = {
 
 country_names = data["Country"].unique()
 country_names.sort()
-country_names = ["World"] + list(country_names)
+country_names = country_names#["World"] + list(country_names)
 
 
 
@@ -93,7 +93,7 @@ content = dbc.Row(
                     [
                         dcc.Dropdown(
                             id="select-country",
-                            value="World",
+                            value=None,
                             options=[{"label": country, "value": country} for country in country_names]
                         ),
                     ], width=7, style={'height':'3vh'}
