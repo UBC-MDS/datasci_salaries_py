@@ -1,0 +1,8 @@
+pandas==1.4.1
+dash==2.2.0
+dash_bootstrap_components==1.0.3 
+geopandas==0.10.2
+altair==4.2.0
+jsonschema==3.2.0 
+## jspmschema is for Altair's bug on Python 3.9, if ypu use python3.7, you dont need to install that
+## See more info on https://github.com/altair-viz/altair/issues/2504
