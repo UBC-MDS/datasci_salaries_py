@@ -104,7 +104,7 @@ content = dbc.Row(
                 dbc.Col([
                     
                     html.Iframe(
-                        id="f11",
+                        id="world_map",
                         # srcDoc=plot_11(),
                         style={"border-width": "0", "width": "100%", "height": "580px"},
                     ),  
@@ -116,7 +116,7 @@ content = dbc.Row(
                     dcc.RangeSlider(id='xslider_1', min=0, max=2500000, value=[0, 2500000],
                                         marks={i: str(i) for i in range(0, 2_500_000, 400_000)}),
                     html.Iframe(
-                        id="f22",
+                        id="salary_heatmap",
                         # srcDoc=plot_13(DS_identity=['Yes', 'No', 'Sort of (Explain more)']),
                         style={"border-width": "0", "width": "100%", "height": "580px"},
                     ),    
@@ -128,7 +128,7 @@ content = dbc.Row(
                 dbc.Col([
 
                     html.Iframe(
-                            id='boxplot',
+                            id='gender-boxplot',
                             style={'border-width': '0', 'width': '100%', 'height': '340px', 'display': 'block'}),
 
                     ], width=7),
@@ -137,7 +137,7 @@ content = dbc.Row(
                 
                 dbc.Col([
                     html.Iframe(
-                        id="f21",
+                        id="edu_histogram",
                         style={"border-width": "0", "width": "100%", "height": "340px",},
                     ),         
 

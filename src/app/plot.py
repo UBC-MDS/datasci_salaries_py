@@ -1,5 +1,3 @@
-
-import numpy as np
 import pandas as pd
 import altair as alt
 import geopandas as gpd
@@ -7,17 +5,13 @@ import geopandas as gpd
 
 data = pd.read_csv("./../../data/processed/cleaned_salaries.csv")
 
-def plot_22(xmax, con):
+def plot_salary_heatmap(xmax, xcon):
     
-    source = data[(data["Age"]>0) & (data["Salary_USD"]<=xmax[1])]
-    if con == "World" or con is None:
-        pass
-    else:
-        source = source[source["Country"] == con]
-
-    
-    alt.themes.enable("default")
-
+    source = data.copy()
+    source = source[(source["Age"]>0) & (source["Salary_USD"]<=xmax[1])]
+    if xcon is not None:
+        source = source[source["Country"] == xcon]
+        
     chart = alt.Chart(source).mark_rect().encode(
         x = alt.X("Age:Q", bin=alt.Bin(maxbins=60), title=None),
         y = alt.Y("Salary_USD:Q", bin=alt.Bin(maxbins=40), 
@@ -43,13 +37,13 @@ def plot_22(xmax, con):
     return fchart.to_html()
 
 
-def plot_12(xcon):
+def plot_gender_boxplot(xcon):
     
-    genders = ['Male', 'Female', 'A different identity']
-    if xcon == "World" or xcon is None:
-        source = data[data["GenderSelect"].isin(genders)]
-    else:
-        source = data[(data["Country"] == xcon) & (data["GenderSelect"].isin(genders))]
+    source = data.copy()
+    source = source.dropna(subset=["GenderSelect"])
+    source["GenderSelect"] = source["GenderSelect"].replace("Non-binary, genderqueer, or gender non-conforming", 'A different identity')
+    if xcon is not None:
+        source = data[data["Country"] == xcon]
         
     chart = alt.Chart(source).mark_boxplot().encode(
         x=alt.X("Salary_USD:Q", 
@@ -63,7 +57,6 @@ def plot_12(xcon):
         orient='bottom'
     ).properties(
         title='Boxplot by gender',
-        projection={"type":'mercator'},
         width=575,
         height=180
     ).interactive()
@@ -71,24 +64,23 @@ def plot_12(xcon):
     return chart.to_html()
 
 
-def plot_21(value):
+def plot_edu_histo(xcon):
+    
     
     education_order = ["Less than bachelor's degree", "Bachelor's degree", 
                        "Master's degree", "Doctoral degree"]
     
-    if value == "World" or value is None:
-        country = data
-    else:
-        country = data.query("Country == @value")
+    source = data.copy()
+    if xcon is not None:
+        source = source.query("Country == @xcon")
         
-    for idx, i in enumerate(country["FormalEducation"]):
+    for idx, i in enumerate(source["FormalEducation"]):
         if i in education_order[1:]:
             continue
         else:
-            print("Change")
-            country["FormalEducation"].iloc[idx] = "Less than bachelor's degree"
+            source["FormalEducation"].iloc[idx] = "Less than bachelor's degree"
 
-    chart = alt.Chart(country).mark_bar().encode(
+    chart = alt.Chart(source).mark_bar().encode(
             x=alt.X("Salary_USD", bin=alt.Bin(maxbins=20), title="Salary in USD"),
             y=alt.Y("count()", title="Counts"),
             color=alt.Color("FormalEducation", sort=education_order,
@@ -109,36 +101,35 @@ def plot_21(value):
     return chart.to_html()
 
 
-def plot_11(xmax):
+def plot_map(xcon):
     
     world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
     world["name"] = world["name"].apply(lambda x:str.lower(" ".join(x.split(" ")[0:2])))
-    
     world = world.loc[world["name"] != "antarctica"]
-    source = data[["Country", "Salary_USD"]].groupby("Country").median().reset_index()
+    
+    source = data.copy()
+    source = source[["Country", "Salary_USD"]].groupby("Country").median().reset_index()
     source["Country"] = source["Country"].apply(lambda x:str.lower(x))
     source.rename({"Country":"name"}, axis=1, inplace=True)
 
-    datamap = pd.merge(world, source, how='left')
-    datamap['Salary_USD'] = datamap['Salary_USD'].fillna(0)
+    datamap = pd.merge(world, source, how='left').dropna(subset=['Salary_USD'])
     
-    chart = alt.Chart(datamap).mark_geoshape().encode( 
+    chart = alt.Chart(datamap).mark_geoshape().project(
+        type='mercator',scale=110, translate=[280, 350]).encode( 
         color=alt.Color(field = "Salary_USD",type = "quantitative",
                         scale=alt.Scale(type = "sqrt"),
                         legend=alt.Legend(title="Salary in USD",labelFontSize = 10,symbolSize = 10,titleFontSize=10)),
-        tooltip=['name:N', 'Salary_USD:Q', "alpha:Q"]
-    )
+        tooltip=['name:N', 'Salary_USD:Q', "alpha:Q"])
     
-    if xmax is not None:
+    if xcon is not None:
         datamap["alpha"] = 1
-        datamap.loc[datamap["name"] == xmax.lower(), "alpha"] = 100
+        datamap.loc[datamap["name"] == xcon.lower(), "alpha"] = 100
         chart = chart.encode(
-            opacity=alt.Opacity(field = "alpha",type = "quantitative", scale=alt.Scale(type = "sqrt")),
+            opacity=alt.Opacity(field="alpha",type="quantitative", legend=None),
         )
         
     chart = chart.properties(
         title='Median Salary of The World',
-        projection={"type":'mercator'},
         width=600,
         height=525,
     ).configure_axis(
@@ -147,7 +138,7 @@ def plot_11(xmax):
     
     return chart.to_html()
 
-def plot_13(DS_identity=['Yes', 'No', 'Sort of (Explain more)'], df=data.copy()):
+def plot_sidebar(DS_identity=['Yes', 'No', 'Sort of (Explain more)'], df=data.copy()):
     # Clean data
     df = df.dropna()
     df = df.query("Salary_USD < 400_000")

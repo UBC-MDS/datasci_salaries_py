@@ -1,11 +1,7 @@
-import pandas as pd
-import altair as alt
-
 import dash
 from dash import html
 from dash import dcc
 import dash_bootstrap_components as dbc
-import dash_alternative_viz as dav
 from dash.dependencies import Input, Output
 
 import sys
@@ -24,61 +20,40 @@ app.layout = html.Div([
     sidebar,
 ])
 
-# @app.callback(
-#     Output(component_id='f21', component_property='spec'),
-#     Output(component_id='f22', component_property='spec'),
-#     [Input('url', 'pathname')]
-# )
-# def plot_21_22(pathname):
-#     return html.Div([
-#         html.H3('You are on page {}'.format(pathname))
-#     ])
-
 @app.callback(Output("scatter", "srcDoc"), Input("data_scientist", "value"))
 def update(DS_identity):
-    rst = plot_13(DS_identity)
+    rst = plot_sidebar(DS_identity)
     return rst
 
-# @app.callback(
-#     Output("f11", "srcDoc"),
-#     Output("f22", "srcDoc"),
-#     Output('boxplot', 'srcDoc'),
-#     Output("f21", "srcDoc"),
-#     [Input('xslider_1', 'value')]
-# )
-# def update(value):
-#     return plot(value)
-
-
 
 @app.callback(
-    Output("f11", "srcDoc"),
+    Output("world_map", "srcDoc"),
     [Input('select-country', 'value')]
 )
-def update(xmax):
-    return plot_11(xmax)
+def update(xcon):
+    return plot_map(xcon)
 
 @app.callback(
-    Output("f22", "srcDoc"),
+    Output("salary_heatmap", "srcDoc"),
     [Input('xslider_1', 'value'), Input('select-country', 'value')]
 )
-def update(xmax, con):
-    return plot_22(xmax, con)
+def update(xmax, xcon):
+    return plot_salary_heatmap(xmax, xcon)
 
 @app.callback(
-    Output('boxplot', 'srcDoc'),
+    Output('gender-boxplot', 'srcDoc'),
     [Input('select-country', 'value')]
 )
-def update(xmax):
-    return plot_12(xmax)
+def update(xcon):
+    return plot_gender_boxplot(xcon)
 
 
 @app.callback(
-    Output("f21", "srcDoc"),
+    Output("edu_histogram", "srcDoc"),
     [Input('select-country', 'value')]
 )
-def update(xmax):
-    return plot_21(xmax)
+def update(xcon):
+    return plot_edu_histo(xcon)
 
 
 if __name__ == '__main__':
