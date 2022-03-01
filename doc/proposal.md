@@ -10,7 +10,7 @@ The knowledge gap over salaries in the field of data science has been one of the
 
 ### Description of the Data
 
-To populate our dashboard, we will be using the [Kaggle Data Scientists Salaries Around the World](https://www.kaggle.com/ikleiman/data-scientists-salaries-around-the-world) dataset by [Iair Kleiman](https://www.kaggle.com/ikleiman). Specifically, the files `conversionRates.csv` and `multipleChoiceResponses.csv` are used in this project. The data is processed using `scripts/data_cleaning.R` to mainly remove rows that do not have salary data, and to convert all salaries to USD from the respective countries' currencies. After data wrangling, the tidy dataset contains information about data scientist salaries in USD in 2018 for 43 different countries with the following features of interest:
+To populate our dashboard, we will be using the [Kaggle Data Scientists Salaries Around the World](https://www.kaggle.com/ikleiman/data-scientists-salaries-around-the-world) dataset by [Iair Kleiman](https://www.kaggle.com/ikleiman). Specifically, the files `conversionRates.csv` and `multipleChoiceResponses.csv` are used in this project. The data is processed using `src/data_cleaning.R` to mainly remove rows that do not have salary data, and to convert all salaries to USD from the respective countries' currencies. After data wrangling, the tidy dataset contains information about data scientist salaries in USD in 2018 for 43 different countries with the following features of interest:
 
 - **Age** - The age of data scientist (numerical).
 
