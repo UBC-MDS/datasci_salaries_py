@@ -42,8 +42,9 @@ def plot_gender_boxplot(xcon):
     source = data.copy()
     source = source.dropna(subset=["GenderSelect"])
     source["GenderSelect"] = source["GenderSelect"].replace("Non-binary, genderqueer, or gender non-conforming", 'A different identity')
+        
     if xcon is not None:
-        source = data[data["Country"] == xcon]
+        source = source[source["Country"] == xcon]
         
     chart = alt.Chart(source).mark_boxplot().encode(
         x=alt.X("Salary_USD:Q", 
@@ -140,7 +141,7 @@ def plot_map(xcon):
 
 def plot_sidebar(DS_identity=['Yes', 'No', 'Sort of (Explain more)'], df=data.copy()):
     # Clean data
-    df = df.dropna()
+    df = df.dropna(subset=["Salary_USD", "Tenure"])
     df = df.query("Salary_USD < 400_000")
     df = df[df["Tenure"] != "I don't write code to analyze data"]
     
