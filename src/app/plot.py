@@ -113,14 +113,15 @@ def plot_map(xcon):
     source["Country"] = source["Country"].apply(lambda x:str.lower(x))
     source.rename({"Country":"name"}, axis=1, inplace=True)
 
-    datamap = pd.merge(world, source, how='left').dropna(subset=['Salary_USD'])
+    datamap = pd.merge(world, source, how='left')
+    datamap = datamap.dropna(subset=['Salary_USD'])
     
     chart = alt.Chart(datamap).mark_geoshape().project(
         type='mercator',scale=110, translate=[280, 350]).encode( 
         color=alt.Color(field = "Salary_USD",type = "quantitative",
                         scale=alt.Scale(type = "sqrt"),
                         legend=alt.Legend(title="Salary in USD",labelFontSize = 10,symbolSize = 10,titleFontSize=10)),
-        tooltip=['name:N', 'Salary_USD:Q', "alpha:Q"])
+        tooltip=['name:N', 'Salary_USD:Q'])
     
     if xcon is not None:
         datamap["alpha"] = 1
