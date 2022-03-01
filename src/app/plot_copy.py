@@ -60,7 +60,9 @@ def plot_hist():
                        "Master's degree", "Doctoral degree"]
     
     country = data
-        
+    country["Country"] = country["Country"].apply(lambda x:str.lower(x))
+    country.rename({"Country":"name"}, axis=1, inplace=True)
+
     for idx, i in enumerate(country["FormalEducation"]):
         if i in education_order[1:]:
             continue
@@ -74,17 +76,18 @@ def plot_hist():
             color=alt.Color("FormalEducation", sort=education_order,
             title="Education level"),
             order=alt.Order('education_order:Q')
-        ).configure_legend(
-            orient='bottom',
-            titleFontSize=8,
-            labelFontSize=8
-        ).properties(
-            title = "Histogram of selected country",
-            width=350,
-            height=180,
-        ).configure_axis(
-            labelFontSize=12
         )
+    # .configure_legend(
+    #         orient='bottom',
+    #         titleFontSize=8,
+    #         labelFontSize=8
+    #     ).properties(
+    #         title = "Histogram of selected country",
+    #         width=350,
+    #         height=180,
+    #     ).configure_axis(
+    #         labelFontSize=12
+    #     )
 
     return chart
 
@@ -116,9 +119,10 @@ def plot(xmax):
         projection={"type":'mercator'},
         width=600,
         height=525,
-    ).configure_axis(
-        labelFontSize=10
     ).add_selection(map_click)
+    #.configure_axis(
+     #   labelFontSize=10
+    #).add_selection(map_click)
     
     ### Rect
     rect, bar = plot_rect(xmax)
@@ -134,6 +138,7 @@ def plot(xmax):
     hist = plot_hist()
     hist = hist.transform_filter(map_click)
 
+    chart_map = alt.vconcat(chart_map, hist, spacing=0)
     return chart_map.to_html(), fchart.to_html(), box.to_html(), hist.to_html()
     
 
