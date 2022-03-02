@@ -8,7 +8,7 @@ The user is able to select a specific country by using a dropdown menu (top left
 
 ## What has not been implemented
 
-To visualize country-specific trends, a dropdown menu is used. However, we believe that the dashboard will be more engaging if the user is able to click on a country ([1](https://github.com/UBC-MDS/datasci_salaries_py/issues/29), [2](https://github.com/UBC-MDS/datasci_salaries_py/pull/30)) on the world map to update the country-specific plots. This will also allow the dashboard to appear more seamless and well-connected.
+To visualize country-specific trends, a dropdown menu is used. However, we believe that the dashboard will be more engaging if the user is able to click on a country (see discussion [1](https://github.com/UBC-MDS/datasci_salaries_py/issues/29), [2](https://github.com/UBC-MDS/datasci_salaries_py/pull/30)) on the world map to update the country-specific plots. This will also allow the dashboard to appear more seamless and well-connected.
 
 Furthermore, the stacked histogram is currently stacked based on the formal education level. To answer our research question in the proposal, a dropdown menu containing other categorical features such as how often the data scientist works remotely can be included so that the user is able to explore more of the data set.
 
