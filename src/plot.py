@@ -3,155 +3,198 @@ import altair as alt
 import geopandas as gpd
 
 
-data = pd.read_csv("./../../data/processed/cleaned_salaries.csv")
+data = pd.read_csv("./../data/processed/cleaned_salaries.csv")
+
 
 def plot_salary_heatmap(xmax, xcon):
-    
+
     source = data.copy()
-    source = source[(source["Age"]>0) & (source["Salary_USD"]<=xmax[1])]
+    source = source[(source["Age"] > 0) & (source["Salary_USD"] <= xmax[1])]
     if xcon is not None:
         source = source[source["Country"] == xcon]
-        
-    chart = alt.Chart(source).mark_rect().encode(
-        x = alt.X("Age:Q", bin=alt.Bin(maxbins=60), title=None),
-        y = alt.Y("Salary_USD:Q", bin=alt.Bin(maxbins=40), 
-                  title="Salary in USD", axis=alt.Axis(format='~s')),
-        tooltip='count()',
-        color=alt.Color('count()',scale=alt.Scale(scheme='greenblue'), legend=alt.Legend(title='Tot. Records')),
-    ).properties(
-        title = "Heatmap of selected country",
-        width=335,
-        height=270,
+
+    chart = (
+        alt.Chart(source)
+        .mark_rect()
+        .encode(
+            x=alt.X("Age:Q", bin=alt.Bin(maxbins=60), title=None),
+            y=alt.Y(
+                "Salary_USD:Q",
+                bin=alt.Bin(maxbins=40),
+                title="Salary in USD",
+                axis=alt.Axis(format="~s"),
+            ),
+            tooltip="count()",
+            color=alt.Color(
+                "count()",
+                scale=alt.Scale(scheme="greenblue"),
+                legend=alt.Legend(title="Tot. Records"),
+            ),
+        )
+        .properties(
+            title="Heatmap of selected country",
+            width=335,
+            height=270,
+        )
     )
-    
-    bar = alt.Chart(source).mark_bar().encode(
-        x='Age:Q',
-        y='count()',
-    ).properties(
-        width=335,
-        height=170,
+
+    bar = (
+        alt.Chart(source)
+        .mark_bar()
+        .encode(
+            x="Age:Q",
+            y="count()",
+        )
+        .properties(
+            width=335,
+            height=170,
+        )
     )
-    
+
     fchart = alt.vconcat(chart, bar, spacing=0)
-    
+
     return fchart.to_html()
 
 
 def plot_gender_boxplot(xcon):
-    
+
     source = data.copy()
     source = source.dropna(subset=["GenderSelect"])
-    source["GenderSelect"] = source["GenderSelect"].replace("Non-binary, genderqueer, or gender non-conforming", 'A different identity')
-        
+    source["GenderSelect"] = source["GenderSelect"].replace(
+        "Non-binary, genderqueer, or gender non-conforming", "A different identity"
+    )
+
     if xcon is not None:
         source = source[source["Country"] == xcon]
-        
-    chart = alt.Chart(source).mark_boxplot().encode(
-        x=alt.X("Salary_USD:Q", 
-                title="Salary in USD", 
-                axis=alt.Axis(format='~s'),
-                scale=alt.Scale(zero=False)),
-        y=alt.Y('GenderSelect', title="Gender"),
-        tooltip='count()',
-        color=alt.Color('GenderSelect', title='Gender')
-    ).configure_legend(
-        orient='bottom'
-    ).properties(
-        title='Boxplot by gender',
-        width=575,
-        height=180
-    ).interactive()
-    
+
+    chart = (
+        alt.Chart(source)
+        .mark_boxplot()
+        .encode(
+            x=alt.X(
+                "Salary_USD:Q",
+                title="Salary in USD",
+                axis=alt.Axis(format="~s"),
+                scale=alt.Scale(zero=False),
+            ),
+            y=alt.Y("GenderSelect", title="Gender"),
+            tooltip="count()",
+            color=alt.Color("GenderSelect", title="Gender"),
+        )
+        .configure_legend(orient="bottom")
+        .properties(title="Boxplot by gender", width=575, height=180)
+        .interactive()
+    )
+
     return chart.to_html()
 
 
 def plot_edu_histo(xcon):
-    
-    
-    education_order = ["Less than bachelor's degree", "Bachelor's degree", 
-                       "Master's degree", "Doctoral degree"]
-    
+
+    education_order = [
+        "Less than bachelor's degree",
+        "Bachelor's degree",
+        "Master's degree",
+        "Doctoral degree",
+    ]
+
     source = data.copy()
     if xcon is not None:
         source = source.query("Country == @xcon")
-        
+
     for idx, i in enumerate(source["FormalEducation"]):
         if i in education_order[1:]:
             continue
         else:
             source["FormalEducation"].iloc[idx] = "Less than bachelor's degree"
 
-    chart = alt.Chart(source).mark_bar().encode(
+    chart = (
+        alt.Chart(source)
+        .mark_bar()
+        .encode(
             x=alt.X("Salary_USD", bin=alt.Bin(maxbins=20), title="Salary in USD"),
             y=alt.Y("count()", title="Counts"),
-            color=alt.Color("FormalEducation", sort=education_order,
-            title="Education level"),
-            order=alt.Order('education_order:Q')
-        ).configure_legend(
-            orient='bottom',
-            titleFontSize=8,
-            labelFontSize=8
-        ).properties(
-            title = "Histogram of selected country",
+            color=alt.Color(
+                "FormalEducation", sort=education_order, title="Education level"
+            ),
+            order=alt.Order("education_order:Q"),
+        )
+        .configure_legend(orient="bottom", titleFontSize=8, labelFontSize=8)
+        .properties(
+            title="Histogram of selected country",
             width=350,
             height=180,
-        ).configure_axis(
-            labelFontSize=12
         )
+        .configure_axis(labelFontSize=12)
+    )
 
     return chart.to_html()
 
 
 def plot_map(xcon):
-    
-    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-    world["name"] = world["name"].apply(lambda x:str.lower(" ".join(x.split(" ")[0:2])))
+
+    world = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
+    world["name"] = world["name"].apply(
+        lambda x: str.lower(" ".join(x.split(" ")[0:2]))
+    )
     world = world.loc[world["name"] != "antarctica"]
-    
+
     source = data.copy()
     source = source[["Country", "Salary_USD"]].groupby("Country").median().reset_index()
-    source["Country"] = source["Country"].apply(lambda x:str.lower(x))
-    source.rename({"Country":"name"}, axis=1, inplace=True)
+    source["Country"] = source["Country"].apply(lambda x: str.lower(x))
+    source.rename({"Country": "name"}, axis=1, inplace=True)
 
-    datamap = pd.merge(world, source, how='left')
-    datamap = datamap.dropna(subset=['Salary_USD'])
-    
-    chart = alt.Chart(datamap).mark_geoshape().project(
-        type='mercator',scale=110, translate=[280, 350]).encode( 
-        color=alt.Color(field = "Salary_USD",type = "quantitative",
-                        scale=alt.Scale(type = "sqrt"),
-                        legend=alt.Legend(title="Salary in USD",labelFontSize = 10,symbolSize = 10,titleFontSize=10)),
-        tooltip=['name:N', 'Salary_USD:Q'])
-    
+    datamap = pd.merge(world, source, how="left")
+    datamap = datamap.dropna(subset=["Salary_USD"])
+
+    chart = (
+        alt.Chart(datamap)
+        .mark_geoshape()
+        .project(type="mercator", scale=110, translate=[280, 350])
+        .encode(
+            color=alt.Color(
+                field="Salary_USD",
+                type="quantitative",
+                scale=alt.Scale(type="sqrt"),
+                legend=alt.Legend(
+                    title="Salary in USD",
+                    labelFontSize=10,
+                    symbolSize=10,
+                    titleFontSize=10,
+                ),
+            ),
+            tooltip=["name:N", "Salary_USD:Q"],
+        )
+    )
+
     if xcon is not None:
         datamap["alpha"] = 1
         datamap.loc[datamap["name"] == xcon.lower(), "alpha"] = 100
         chart = chart.encode(
-            opacity=alt.Opacity(field="alpha",type="quantitative", legend=None),
+            opacity=alt.Opacity(field="alpha", type="quantitative", legend=None),
         )
-        
+
     chart = chart.properties(
-        title='Median Salary of The World',
+        title="Median Salary of The World",
         width=600,
         height=525,
-    ).configure_axis(
-        labelFontSize=10
-    )    
-    
+    ).configure_axis(labelFontSize=10)
+
     return chart.to_html()
 
-def plot_sidebar(DS_identity=['Yes', 'No', 'Sort of (Explain more)'], df=data.copy()):
+
+def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.copy()):
     # Clean data
     df = df.dropna(subset=["Salary_USD", "Tenure"])
     df = df.query("Salary_USD < 400_000")
     df = df[df["Tenure"] != "I don't write code to analyze data"]
-    
+
     # Filter data
     if DS_identity == None:
-        DS_identity = ['Yes', 'No', 'Sort of (Explain more)']
+        DS_identity = ["Yes", "No", "Sort of (Explain more)"]
     if not isinstance(DS_identity, list):
         DS_identity = list(DS_identity)
-    df = df[df['DataScienceIdentitySelect'].isin(DS_identity)]
+    df = df[df["DataScienceIdentitySelect"].isin(DS_identity)]
 
     # alt.themes.enable("dark")
 
@@ -174,41 +217,40 @@ def plot_sidebar(DS_identity=['Yes', 'No', 'Sort of (Explain more)'], df=data.co
             tooltip="EmployerIndustry",
         )
         .add_selection(brush)
-    ).properties(
-        width=300,
-        height=680
-    )
+    ).properties(width=300, height=680)
 
     bars = (
         alt.Chart(df, title="Click to filter the above plot!")
         .mark_bar()
         .encode(
             x="count()",
-            y=alt.Y("Tenure", title="Coding Experience", sort=['More than 10 years', '6 to 10 years', '3 to 5 years', '1 to 2 years', 'Less than a year']),
+            y=alt.Y(
+                "Tenure",
+                title="Coding Experience",
+                sort=[
+                    "More than 10 years",
+                    "6 to 10 years",
+                    "3 to 5 years",
+                    "1 to 2 years",
+                    "Less than a year",
+                ],
+            ),
             color="Tenure",
             opacity=alt.condition(click, alt.value(0.9), alt.value(0.2)),
         )
     ).transform_filter(brush)
 
-    overall_plot = (points & bars).configure(
-            background="#2c2c2c"
-        ).configure_axisX(
-            titleColor='white',
-            titleFontSize=10,
-            labelColor='white',
-            labelFontSize=10
-        ).configure_axisY(
-            titleColor='white',
-            titleFontSize=12,
-            labelColor='white',
-            labelFontSize=12
-        ).configure_title(
-            fontSize=20,
-            color='white'
-        ).add_selection(
-            click
+    overall_plot = (
+        (points & bars)
+        .configure(background="#2c2c2c")
+        .configure_axisX(
+            titleColor="white", titleFontSize=10, labelColor="white", labelFontSize=10
         )
+        .configure_axisY(
+            titleColor="white", titleFontSize=12, labelColor="white", labelFontSize=12
+        )
+        .configure_title(fontSize=20, color="white")
+        .add_selection(click)
+    )
 
-    
     return overall_plot.to_html()
-
