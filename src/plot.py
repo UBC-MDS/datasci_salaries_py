@@ -3,7 +3,7 @@ import altair as alt
 import geopandas as gpd
 
 
-data = pd.read_csv("./../data/processed/cleaned_salaries.csv")
+data = pd.read_csv("/app/data/processed/cleaned_salaries.csv")
 
 
 def plot_salary_heatmap(xmax, xcon):
