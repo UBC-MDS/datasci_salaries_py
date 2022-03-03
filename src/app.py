@@ -8,7 +8,7 @@ import sys
 
 sys.path.append("/app/")
 from .layout import *
-from plot import *
+from .plot import *
 
 app = dash.Dash(
     __name__, external_stylesheets=[dbc.themes.BOOTSTRAP, "/css/button.css"]
