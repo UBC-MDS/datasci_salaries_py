@@ -3,7 +3,7 @@ import altair as alt
 import geopandas as gpd
 
 
-data = pd.read_csv("./../data/processed/cleaned_salaries.csv")
+data = pd.read_csv("/app/data/processed/cleaned_salaries.csv")
 
 
 def plot_salary_heatmap(xmax, xcon):
@@ -148,9 +148,8 @@ def plot_map(xcon):
     datamap = datamap.dropna(subset=["Salary_USD"])
 
     chart = (
-        alt.Chart(datamap)
-        .mark_geoshape()
-        .project(type="mercator", scale=110, translate=[280, 350])
+        alt.Chart(datamap).mark_geoshape()
+        # .project(type="mercator", scale=110, translate=[280, 350])
         .encode(
             color=alt.Color(
                 field="Salary_USD",
