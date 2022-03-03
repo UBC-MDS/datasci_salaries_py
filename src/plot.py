@@ -149,7 +149,7 @@ def plot_map(xcon):
 
     chart = (
         alt.Chart(datamap).mark_geoshape()
-        # .project(type="mercator", scale=110, translate=[280, 350])
+        .project(type="mercator", scale=110, translate=[280, 350])
         .encode(
             color=alt.Color(
                 field="Salary_USD",
