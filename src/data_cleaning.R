@@ -128,7 +128,8 @@ df_20 <- df_20 %>%
   mutate(Median_to_Salary = Compensation_Median_USD/Salary_USD)
 
 df_20 <- df_20 %>%
-  filter(Salary_USD < 4000000)
+  filter(Salary_USD < 500000,
+         Age > 17)
 
 write.csv(df_20, here("data", "processed", "cleaned_salaries.csv"), row.names = FALSE)
 
