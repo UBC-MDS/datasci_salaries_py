@@ -44,7 +44,7 @@ topbar = html.Div(
                 html.Div(
                     [
                         html.H2(
-                            "XXXXXX",
+                            "Data Science Salaries Dashboard",
                             style={
                                 "color": "white",
                                 "font-size": "20px",
@@ -67,7 +67,7 @@ sidebar = html.Div(
                     [
                         html.H2(
                             "Are you a Data Scientist?",
-                            style={"color": "white", "font-size": "16px"},
+                            style={"color": "gray", "font-size": "16px"},
                         ),
                         dcc.Dropdown(
                             id="data_scientist",
@@ -84,7 +84,7 @@ sidebar = html.Div(
                 html.Iframe(
                     id="scatter",
                     # srcDoc=plot_13(DS_identity=['Yes', 'No', 'Sort of (Explain more)']),
-                    style={"border-width": "0", "width": "100%", "height": "1500px"},
+                    style={"border-width": "0", "width": "100%", "height": "100%"},
                 ),
             ]
         )
