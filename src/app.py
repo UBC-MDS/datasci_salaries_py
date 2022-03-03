@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output
 import sys
 
 sys.path.append("/app/")
-from layout import *
+from .layout import *
 from plot import *
 
 app = dash.Dash(
