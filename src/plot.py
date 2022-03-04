@@ -145,7 +145,7 @@ def plot_map(xcon):
     source["Country"] = source["Country"].apply(lambda x: str.lower(x))
 
     datamap = pd.merge(world, source, how="left")
-    datamap = datamap.dropna(subset=["Salary_USD"])
+    datamap['Salary_USD'] = datamap['Salary_USD'].fillna(0)
     datamap["Country"] = datamap["Country"].apply(lambda x: str.capitalize(x))
     
     chart = (
