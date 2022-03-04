@@ -145,11 +145,11 @@ def plot_map(xcon):
     source["Country"] = source["Country"].apply(lambda x: str.lower(x))
 
     datamap = pd.merge(world, source, how="left")
-    datamap['Salary_USD'] = datamap['Salary_USD'].fillna(0)
+    datamap['Salary_USD'] = datamap['Salary_USD'].fillna("")
     datamap["Country"] = datamap["Country"].apply(lambda x: str.capitalize(x))
     
     chart = (
-        alt.Chart(datamap).mark_geoshape()
+        alt.Chart(datamap).mark_geoshape(stroke='gray')
         .project(type="mercator", scale=110, translate=[280, 350])
         .encode(
             color=alt.Color(
@@ -163,7 +163,7 @@ def plot_map(xcon):
                     titleFontSize=10,
                 ),
             ),
-            tooltip=["Country:N", "Salary_USD:Q"],
+            tooltip=["Country:N", "Salary_USD"],
         )
     )
 
