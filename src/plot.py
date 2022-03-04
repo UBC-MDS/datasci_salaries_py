@@ -202,11 +202,11 @@ def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.co
     click = alt.selection_multi(fields=["Tenure"])
 
     points = (
-        alt.Chart(df, title="Select a window for interactive coding experience count")
+        alt.Chart(df, title="Interactive window for coding experience count")
         .mark_circle()
         .encode(
             y=alt.Y("Country", title=None),
-            x=alt.X("Salary_USD", title="Salary in USD"),
+            x=alt.X("Salary_USD", axis=alt.Axis(format="~s"), title="Salary in USD"),
             color=alt.condition(
                 brush,
                 alt.Color("Tenure:N", legend=None),
@@ -222,7 +222,7 @@ def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.co
         alt.Chart(df, title="Click to filter the above plot!")
         .mark_bar()
         .encode(
-            x="count()",
+            x=alt.X("count()", title="Counts"),
             y=alt.Y(
                 "Tenure",
                 title="Coding Experience",
