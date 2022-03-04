@@ -138,15 +138,16 @@ def plot_map(xcon):
         lambda x: str.lower(" ".join(x.split(" ")[0:2]))
     )
     world = world.loc[world["name"] != "antarctica"]
+    world.rename({"name": "Country"}, axis=1, inplace=True)
 
     source = data.copy()
     source = source[["Country", "Salary_USD"]].groupby("Country").median().reset_index()
     source["Country"] = source["Country"].apply(lambda x: str.lower(x))
-    source.rename({"Country": "name"}, axis=1, inplace=True)
 
     datamap = pd.merge(world, source, how="left")
     datamap = datamap.dropna(subset=["Salary_USD"])
-
+    datamap["Country"] = datamap["Country"].apply(lambda x: str.capitalize(x))
+    
     chart = (
         alt.Chart(datamap).mark_geoshape()
         .project(type="mercator", scale=110, translate=[280, 350])
@@ -162,13 +163,13 @@ def plot_map(xcon):
                     titleFontSize=10,
                 ),
             ),
-            tooltip=["name:N", "Salary_USD:Q"],
+            tooltip=["Country:N", "Salary_USD:Q"],
         )
     )
 
     if xcon is not None:
         datamap["alpha"] = 1
-        datamap.loc[datamap["name"] == xcon.lower(), "alpha"] = 100
+        datamap.loc[datamap["Country"] == xcon, "alpha"] = 100
         chart = chart.encode(
             opacity=alt.Opacity(field="alpha", type="quantitative", legend=None),
         )
