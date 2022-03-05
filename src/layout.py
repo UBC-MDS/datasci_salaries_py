@@ -144,8 +144,8 @@ content = dbc.Row(
                                 dcc.RangeSlider(
                                     id="xslider_1",
                                     min=0,
-                                    max=400000,
-                                    value=[0, 400000],
+                                    max=500000,
+                                    value=[0, 500000],
                                     marks={
                                         i: str(si_format(i, precision=1)) for i in range(0, 440_000, 80_000)
                                     },
