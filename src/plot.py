@@ -163,7 +163,7 @@ def plot_map(xcon):
     
     chart = (
         alt.Chart(datamap).mark_geoshape(stroke='gray')
-        .project(type="mercator", scale=60, translate=[250, 175])
+        .project(type="mercator", scale=40, translate=[185, 120])
         .encode(
             color=alt.Color(
                 field="Salary_USD",
@@ -192,8 +192,8 @@ def plot_map(xcon):
 
     chart = chart.properties(
         title=f"Median Salary of {xcon}",
-        width=400,
-        height=200,
+        width=350,
+        height=175,
     ).configure_axis(labelFontSize=10)
 
     return chart.to_html()
