@@ -158,7 +158,7 @@ def plot_map(xcon):
     source["Country"] = source["Country"].apply(lambda x: str.lower(x))
 
     datamap = pd.merge(world, source, how="left")
-    datamap['Salary_USD'] = datamap['Salary_USD'].fillna("")
+    datamap['Salary_USD'] = datamap['Salary_USD'].fillna(0)
     datamap["Country"] = datamap["Country"].apply(lambda x: str.capitalize(x))
     
     chart = (
@@ -168,7 +168,7 @@ def plot_map(xcon):
             color=alt.Color(
                 field="Salary_USD",
                 type="quantitative",
-                scale=alt.Scale(type="sqrt"),
+                # scale=alt.Scale(type="sqrt"),
                 legend=alt.Legend(
                     title="Salary in USD",
                     labelFontSize=10,

@@ -121,20 +121,36 @@ content = dbc.Row(
                 dbc.Row(
                     [
                         dbc.Col(
-                            [dbc.Row(style={"height": "10vh"}),
+                            [
                              dbc.Row(
+                                html.Iframe(
+                                    # srcDoc=plot_11(),
+                                    style={
+                                        "border-width": "0",
+                                        "width": "100%",
+                                        "height": "13vh",
+                                    },
+                                ),
+                             ),                             dbc.Row(
                                 html.Iframe(
                                     id="world_map",
                                     # srcDoc=plot_11(),
                                     style={
                                         "border-width": "0",
                                         "width": "100%",
-                                        "height": "60vh",
+                                        "height": "35vh",
                                     },
                                 ),
-                             )
-                             dbc.Row(style={"height": "10vh"})
-                            ],
+                             ),
+                             dbc.Row(
+                                html.Iframe(
+                                    style={
+                                        "border-width": "0",
+                                        "width": "100%",
+                                        "height": "13vh",
+                                    },
+                                ),
+                             ),                            ],
                             width=6,
                         ),
                         
