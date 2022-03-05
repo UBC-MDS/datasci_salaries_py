@@ -1,7 +1,8 @@
 # Data Science Salaries Dashboard
 ## About
 
-This project aims to build a [dashboard](https://datasci-salaries-py.herokuapp.com/) to visualize data science salaries across the world. Further details can be found in our proposal [here](https://github.com/UBC-MDS/datasci_salaries_py/blob/main/proposal.md).
+This project aims to build a dashboard to visualize data science salaries across the world. The link to the dashboard is [here](https://datasci-salaries-py.herokuapp.com/)
+Further details can be found in our proposal [here](https://github.com/UBC-MDS/datasci_salaries_py/blob/main/proposal.md).
 
 ## The problem
 
