@@ -161,6 +161,7 @@ def plot_map(xcon):
                     labelFontSize=10,
                     symbolSize=10,
                     titleFontSize=10,
+                    format="~s"
                 ),
             ),
             tooltip=["Country:N", "Salary_USD"],
