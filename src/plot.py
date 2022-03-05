@@ -132,13 +132,13 @@ def plot_edu_histo(xcon):
             ),
             order=alt.Order("education_order:Q"),
         )
-        .configure_legend(orient="bottom", titleFontSize=8, labelFontSize=8)
+        .configure_legend(orient="bottom", titleFontSize=12, labelFontSize=12)
         .properties(
             title=f"Histogram of {xcon}",
             width=scale_plots*300,
             height=scale_plots*120,
         )
-        .configure_axis(labelFontSize=12).configure_legend(labelFontSize=12)
+        .configure_axis(labelFontSize=12)
     )
 
     return chart.to_html()
