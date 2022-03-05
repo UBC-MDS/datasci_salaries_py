@@ -4,6 +4,7 @@ dash_bootstrap_components==1.0.3
 geopandas==0.10.2
 altair==4.2.0
 jsonschema==3.2.0 
+si-prefix==1.2.2
 gunicorn
 ## jsonschema is for Altair's bug on Python 3.9, if you use python3.7, you don't need to install that
 ## See more info at https://github.com/altair-viz/altair/issues/2504

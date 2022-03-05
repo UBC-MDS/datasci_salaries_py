@@ -1,10 +1,10 @@
 from dash import html
 from dash import dcc
 import dash_bootstrap_components as dbc
+import si_format
 
-
-# from .plot import *
-from plot import *
+from .plot import *
+# from plot import *
 
 
 SIDEBAR_STYLE = {
@@ -134,6 +134,8 @@ content = dbc.Row(
                             ],
                             width=7,
                         ),
+                        
+
                         dbc.Col(
                             [
                                 html.H2("select a salary range:",                             
@@ -145,9 +147,10 @@ content = dbc.Row(
                                     max=400000,
                                     value=[0, 400000],
                                     marks={
-                                        i: str(i) for i in range(0, 440_000, 80_000)
+                                        i: str(si_format(i, precision=1)) for i in range(0, 440_000, 80_000)
                                     },
                                 ),
+                                
                                 html.Iframe(
                                     id="salary_heatmap",
                                     # srcDoc=plot_13(DS_identity=['Yes', 'No', 'Sort of (Explain more)']),
