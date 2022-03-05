@@ -136,7 +136,7 @@ def plot_edu_histo(xcon):
             width=300,
             height=120,
         )
-        .configure_axis(labelFontSize=12)
+        .configure_axis(labelFontSize=12).configure_legend(labelFontSize=12)
     )
 
     return chart.to_html()
