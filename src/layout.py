@@ -1,7 +1,7 @@
 from dash import html
 from dash import dcc
 import dash_bootstrap_components as dbc
-
+import si_format
 
 from .plot import *
 # from plot import *
@@ -134,20 +134,23 @@ content = dbc.Row(
                             ],
                             width=7,
                         ),
+                        
+
                         dbc.Col(
                             [
-                                html.H2("select a salary range:",                             
+                                html.H2("Select a salary range:",                             
                                         style={"color":"black", "font-size": "12px"}
                                         ),
                                 dcc.RangeSlider(
                                     id="xslider_1",
                                     min=0,
-                                    max=400000,
-                                    value=[0, 400000],
+                                    max=500000,
+                                    value=[0, 500000],
                                     marks={
-                                        i: str(i) for i in range(0, 440_000, 80_000)
+                                        i: str(si_format(i, precision=1)) for i in range(0, 550_000, 80_000)
                                     },
                                 ),
+                                
                                 html.Iframe(
                                     id="salary_heatmap",
                                     # srcDoc=plot_13(DS_identity=['Yes', 'No', 'Sort of (Explain more)']),
@@ -171,7 +174,7 @@ content = dbc.Row(
                                     style={
                                         "border-width": "0",
                                         "width": "100%",
-                                        "height": "30vh",
+                                        "height": "32vh",
                                         "display": "block",
                                     },
                                 ),
@@ -185,7 +188,7 @@ content = dbc.Row(
                                     style={
                                         "border-width": "0",
                                         "width": "100%",
-                                        "height": "30vh",
+                                        "height": "32vh",
                                     },
                                 ),
                             ],
