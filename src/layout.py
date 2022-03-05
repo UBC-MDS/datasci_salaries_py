@@ -12,7 +12,7 @@ SIDEBAR_STYLE = {
     "top": "0rem",
     "right": 0,
     "bottom": 0,
-    "width": 350,
+    "width": 380,
     "padding": "2rem 0rem",
     "background-color": "#2C2C2C",
 }
