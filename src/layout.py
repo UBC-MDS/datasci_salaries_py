@@ -138,7 +138,7 @@ content = dbc.Row(
 
                         dbc.Col(
                             [
-                                html.H2("select a salary range:",                             
+                                html.H2("Select a salary range:",                             
                                         style={"color":"black", "font-size": "12px"}
                                         ),
                                 dcc.RangeSlider(
