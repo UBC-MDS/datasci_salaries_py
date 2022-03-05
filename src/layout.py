@@ -121,7 +121,8 @@ content = dbc.Row(
                 dbc.Row(
                     [
                         dbc.Col(
-                            [
+                            [dbc.Row(style={"height": "10vh"}),
+                             dbc.Row(
                                 html.Iframe(
                                     id="world_map",
                                     # srcDoc=plot_11(),
@@ -131,6 +132,8 @@ content = dbc.Row(
                                         "height": "60vh",
                                     },
                                 ),
+                             )
+                             dbc.Row(style={"height": "10vh"})
                             ],
                             width=6,
                         ),
