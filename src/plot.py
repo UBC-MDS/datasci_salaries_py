@@ -6,6 +6,8 @@ import geopandas as gpd
 data = pd.read_csv("/app/data/processed/cleaned_salaries.csv")
 # data = pd.read_csv("./data/processed/cleaned_salaries.csv")
 
+scale_plots = 0.8
+
 
 def plot_salary_heatmap(xmax, xcon):
 
@@ -40,8 +42,8 @@ def plot_salary_heatmap(xmax, xcon):
         )
         .properties(
             title=f"Heatmap of {xcon}",
-            width=300,
-            height=200,
+            width=scale_plots * 300,
+            height=scale_plots* 200,
         )
     )
 
@@ -53,8 +55,8 @@ def plot_salary_heatmap(xmax, xcon):
             y=alt.Y("count()", title="Counts"),
         )
         .properties(
-            width=300,
-            height=130,
+            width=scale_plots * 300,
+            height=scale_plots * 130,
         )
     )
 
@@ -91,7 +93,7 @@ def plot_gender_boxplot(xcon):
             color=alt.Color("GenderSelect", title="Gender"),
         )
         .configure_legend(orient="bottom")
-        .properties(title=f"Boxplot by gender in {xcon}", width=420, height=120)
+        .properties(title=f"Boxplot by gender in {xcon}", width=scale_plots* 420, height=scale_plots * 120)
         .interactive()
     )
 
@@ -133,8 +135,8 @@ def plot_edu_histo(xcon):
         .configure_legend(orient="bottom", titleFontSize=8, labelFontSize=8)
         .properties(
             title=f"Histogram of {xcon}",
-            width=300,
-            height=120,
+            width=scale_plots*300,
+            height=scale_plots*120,
         )
         .configure_axis(labelFontSize=12).configure_legend(labelFontSize=12)
     )
@@ -190,8 +192,8 @@ def plot_map(xcon):
 
     chart = chart.properties(
         title=f"Median Salary of {xcon}",
-        width=460,
-        height=485,
+        width=scale_plots*460,
+        height=scale_plots*485,
     ).configure_axis(labelFontSize=10)
 
     return chart.to_html()
@@ -231,7 +233,7 @@ def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.co
             tooltip="EmployerIndustry",
         )
         .add_selection(brush)
-    ).properties(width=250, height=490)
+    ).properties(width=scale_plots*250, height=scale_plots*490)
 
     bars = (
         alt.Chart(df, title="Click to filter the above plot!")
@@ -252,7 +254,7 @@ def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.co
             color="Tenure",
             opacity=alt.condition(click, alt.value(0.9), alt.value(0.2)),
         )
-    ).properties(width=250, height=100).transform_filter(brush)
+    ).properties(width=scale_plots*250, height=scale_plots*100).transform_filter(brush)
 
     overall_plot = (
         alt.vconcat(points, bars, spacing=1)
