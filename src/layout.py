@@ -12,7 +12,7 @@ SIDEBAR_STYLE = {
     "top": "0rem",
     "right": 0,
     "bottom": 0,
-    "width": 350,
+    "width": 380,
     "padding": "2rem 0rem",
     "background-color": "#2C2C2C",
 }
@@ -69,7 +69,7 @@ sidebar = html.Div(
                     [
                         html.H2(
                             "\rAre you a Data Scientist?",
-                            style={"color": "gray", "font-size": "14px"},
+                            style={"color": "white", "font-size": "14px"},
                         ),
                         dcc.Dropdown(
                             id="data_scientist",
