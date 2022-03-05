@@ -4,13 +4,14 @@
 This project aims to build a dashboard to visualize data science salaries across the world. The link to the dashboard is [here](https://datasci-salaries-py.herokuapp.com/)
 Further details can be found in our proposal [here](https://github.com/UBC-MDS/datasci_salaries_py/blob/main/proposal.md).
 
+
 ## The problem
 
 The knowledge gap over salaries in the field of data science has been one of the challenges for graduates with different education levels around the world. Understanding the salary levels can help keep appropriate expectations for people who are considering getting into the field or seeking related jobs. To achieve this purpose, we plan to build an application which provides reliable information and visualizations of data science salary levels around the world for those who need it.
 
 ## Description and sketch
 
-The dashboard shows a world map with the median data science salary of a country encoded in the colour channel. By selecting a country to focus on, a histogram showing the distribution of salaries, a boxplot showing the distribution of salaries per gender, and a 2D-histogram showing the distribution of salaries by age are updated for the specified country. For both the histogram and 2D-histogram plots, x-axis sliders are provided so that users can zoom in on regions of the x-axes that they are interested in. Furthermore, a scatter plot of the salaries for each country is shown on the right.
+The dashboard shows a world map with the median data science salary of a country encoded in the colour channel. By selecting a country to focus on using a dropdown menu, a histogram showing the distribution of salaries, a boxplot showing the distribution of salaries per gender, and a heatmap showing the distribution of salaries by age are updated for the specified country. For the heatmap, an x-axis slider is provided so that users can zoom in on regions of the x-axis that they are interested in. Furthermore, a scatter plot of the salaries for each country is shown on the right.
 
 ![app](https://github.com/UBC-MDS/datasci_salaries_py/blob/main/media/app.png)
 
