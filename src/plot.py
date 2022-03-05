@@ -192,8 +192,8 @@ def plot_map(xcon):
 
     chart = chart.properties(
         title=f"Median Salary of {xcon}",
-        width=500,
-        height=250,
+        width=240,
+        height=120,
     ).configure_axis(labelFontSize=10)
 
     return chart.to_html()
