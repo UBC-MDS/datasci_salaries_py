@@ -131,7 +131,8 @@ content = dbc.Row(
                                         "height": "13vh",
                                     },
                                 ),
-                             ),                             dbc.Row(
+                             ), 
+                             dbc.Row(
                                 html.Iframe(
                                     id="world_map",
                                     # srcDoc=plot_11(),
