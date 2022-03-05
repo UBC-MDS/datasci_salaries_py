@@ -112,7 +112,7 @@ def plot_edu_histo(xcon):
         alt.Chart(source)
         .mark_bar()
         .encode(
-            x=alt.X("Salary_USD", bin=alt.Bin(maxbins=20), title="Salary in USD"),
+            x=alt.X("Salary_USD", axis=alt.Axis(format="~s"), bin=alt.Bin(maxbins=20), title="Salary in USD"),
             y=alt.Y("count()", title="Counts"),
             color=alt.Color(
                 "FormalEducation", sort=education_order, title="Education level"
