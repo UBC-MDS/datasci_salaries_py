@@ -4,14 +4,16 @@ import dash_bootstrap_components as dbc
 
 
 from .plot import *
+# from plot import *
+
 
 SIDEBAR_STYLE = {
     "position": "fixed",
-    "top": 0,
+    "top": "0rem",
     "right": 0,
     "bottom": 0,
-    "width": "36rem",
-    "padding": "3rem 3rem",
+    "width": 400,
+    "padding": "2rem 0rem",
     "background-color": "#2C2C2C",
 }
 
@@ -19,8 +21,8 @@ TOPBAR_STYLE = {
     "top": 0,
     "right": 0,
     "left": 0,
-    "height": "3rem",
-    "margin-right": "36rem",
+    "height": "2rem",
+    "margin-right": "10rem",
     "padding": "0rem 0rem",
     "background-color": "#808080",
     # "background-color": "#fffff",
@@ -28,7 +30,7 @@ TOPBAR_STYLE = {
 
 CONTENT_STYLE = {
     "margin-left": "0rem",
-    "margin-right": "36rem",
+    "margin-right": "3rem",
     "padding": "0rem 0rem",
 }
 
@@ -66,8 +68,8 @@ sidebar = html.Div(
                 html.Div(
                     [
                         html.H2(
-                            "Are you a Data Scientist?",
-                            style={"color": "gray", "font-size": "16px"},
+                            "\rAre you a Data Scientist?",
+                            style={"color": "gray", "font-size": "14px"},
                         ),
                         dcc.Dropdown(
                             id="data_scientist",
@@ -78,13 +80,14 @@ sidebar = html.Div(
                             ],
                             value=["Yes", "No", "Sort of (Explain more)"],
                             multi=True,
+                            style={"font-size": "12px", "height": "3vh"},
                         ),
                     ]
                 ),
                 html.Iframe(
                     id="scatter",
                     # srcDoc=plot_13(DS_identity=['Yes', 'No', 'Sort of (Explain more)']),
-                    style={"border-width": "0", "width": "100%", "height": "1200px"},
+                    style={"border-width": "0", "width": "100%", "height": "100vh"},
                 ),
             ]
         )
@@ -102,6 +105,7 @@ content = dbc.Row(
                         [
                             dcc.Dropdown(
                                 id="select-country",
+                                placeholder='Please select a country',
                                 value=None,
                                 options=[
                                     {"label": country, "value": country}
@@ -124,7 +128,7 @@ content = dbc.Row(
                                     style={
                                         "border-width": "0",
                                         "width": "100%",
-                                        "height": "580px",
+                                        "height": "60vh",
                                     },
                                 ),
                             ],
@@ -132,13 +136,16 @@ content = dbc.Row(
                         ),
                         dbc.Col(
                             [
+                                html.H2("select a salary range:",                             
+                                        style={"color":"black", "font-size": "12px"}
+                                        ),
                                 dcc.RangeSlider(
                                     id="xslider_1",
                                     min=0,
-                                    max=2500000,
-                                    value=[0, 2500000],
+                                    max=400000,
+                                    value=[0, 400000],
                                     marks={
-                                        i: str(i) for i in range(0, 2_500_000, 400_000)
+                                        i: str(i) for i in range(0, 440_000, 80_000)
                                     },
                                 ),
                                 html.Iframe(
@@ -147,7 +154,7 @@ content = dbc.Row(
                                     style={
                                         "border-width": "0",
                                         "width": "100%",
-                                        "height": "580px",
+                                        "height": "52vh",
                                     },
                                 ),
                             ],
@@ -164,7 +171,7 @@ content = dbc.Row(
                                     style={
                                         "border-width": "0",
                                         "width": "100%",
-                                        "height": "340px",
+                                        "height": "30vh",
                                         "display": "block",
                                     },
                                 ),
@@ -178,7 +185,7 @@ content = dbc.Row(
                                     style={
                                         "border-width": "0",
                                         "width": "100%",
-                                        "height": "340px",
+                                        "height": "30vh",
                                     },
                                 ),
                             ],
@@ -188,6 +195,11 @@ content = dbc.Row(
                 ),
             ]
         ),
+        
+        dbc.Col(
+            [sidebar],
+            width=3,
+        )
     ],
     style=CONTENT_STYLE,
 )

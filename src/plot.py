@@ -4,6 +4,7 @@ import geopandas as gpd
 
 
 data = pd.read_csv("/app/data/processed/cleaned_salaries.csv")
+# data = pd.read_csv("./data/processed/cleaned_salaries.csv")
 
 
 def plot_salary_heatmap(xmax, xcon):
@@ -12,15 +13,21 @@ def plot_salary_heatmap(xmax, xcon):
     source = source[(source["Age"] > 0) & (source["Salary_USD"] <= xmax[1])]
     if xcon is not None:
         source = source[source["Country"] == xcon]
-
+    else:
+        xcon = 'the World'
+        
+    x_bin_num = max(int((source.shape[0]/6)**0.65), 6)
+    y_bin_num = max(int((source.shape[0]/6)**0.65), 6)   
+    
+        
     chart = (
         alt.Chart(source)
         .mark_rect()
         .encode(
-            x=alt.X("Age:Q", bin=alt.Bin(maxbins=60), title=None),
+            x=alt.X("Age:Q", bin=alt.Bin(maxbins=x_bin_num), title=None),
             y=alt.Y(
                 "Salary_USD:Q",
-                bin=alt.Bin(maxbins=40),
+                bin=alt.Bin(maxbins=y_bin_num),
                 title="Salary in USD",
                 axis=alt.Axis(format="~s"),
             ),
@@ -28,13 +35,13 @@ def plot_salary_heatmap(xmax, xcon):
             color=alt.Color(
                 "count()",
                 scale=alt.Scale(scheme="greenblue"),
-                legend=alt.Legend(title="Tot. Records"),
+                legend=alt.Legend(title="Counts"),
             ),
         )
         .properties(
-            title="Heatmap of selected country",
-            width=335,
-            height=270,
+            title=f"Heatmap of {xcon}",
+            width=300,
+            height=200,
         )
     )
 
@@ -42,12 +49,12 @@ def plot_salary_heatmap(xmax, xcon):
         alt.Chart(source)
         .mark_bar()
         .encode(
-            x="Age:Q",
-            y="count()",
+            x=alt.X("Age:Q"),
+            y=alt.Y("count()", title="Counts"),
         )
         .properties(
-            width=335,
-            height=170,
+            width=300,
+            height=130,
         )
     )
 
@@ -66,6 +73,8 @@ def plot_gender_boxplot(xcon):
 
     if xcon is not None:
         source = source[source["Country"] == xcon]
+    else:
+        xcon = 'the World'
 
     chart = (
         alt.Chart(source)
@@ -82,7 +91,7 @@ def plot_gender_boxplot(xcon):
             color=alt.Color("GenderSelect", title="Gender"),
         )
         .configure_legend(orient="bottom")
-        .properties(title="Boxplot by gender", width=575, height=180)
+        .properties(title=f"Boxplot by gender in {xcon}", width=420, height=150)
         .interactive()
     )
 
@@ -101,6 +110,8 @@ def plot_edu_histo(xcon):
     source = data.copy()
     if xcon is not None:
         source = source.query("Country == @xcon")
+    else:
+        xcon = 'the World'
 
     for idx, i in enumerate(source["FormalEducation"]):
         if i in education_order[1:]:
@@ -121,9 +132,9 @@ def plot_edu_histo(xcon):
         )
         .configure_legend(orient="bottom", titleFontSize=8, labelFontSize=8)
         .properties(
-            title="Histogram of selected country",
-            width=350,
-            height=180,
+            title=f"Histogram of {xcon}",
+            width=300,
+            height=160,
         )
         .configure_axis(labelFontSize=12)
     )
@@ -173,11 +184,13 @@ def plot_map(xcon):
         chart = chart.encode(
             opacity=alt.Opacity(field="alpha", type="quantitative", legend=None),
         )
+    else:
+        xcon = 'the World'
 
     chart = chart.properties(
-        title="Median Salary of The World",
-        width=600,
-        height=525,
+        title=f"Median Salary of {xcon}",
+        width=550,
+        height=485,
     ).configure_axis(labelFontSize=10)
 
     return chart.to_html()
@@ -217,7 +230,7 @@ def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.co
             tooltip="EmployerIndustry",
         )
         .add_selection(brush)
-    ).properties(width=300, height=680)
+    ).properties(width=250, height=490)
 
     bars = (
         alt.Chart(df, title="Click to filter the above plot!")
@@ -238,18 +251,18 @@ def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.co
             color="Tenure",
             opacity=alt.condition(click, alt.value(0.9), alt.value(0.2)),
         )
-    ).transform_filter(brush)
+    ).properties(width=250, height=100).transform_filter(brush)
 
     overall_plot = (
-        (points & bars)
+        alt.vconcat(points, bars, spacing=1)
         .configure(background="#2c2c2c")
         .configure_axisX(
-            titleColor="white", titleFontSize=10, labelColor="white", labelFontSize=10
+            titleColor="white", titleFontSize=10, labelColor="white", labelFontSize=8
         )
         .configure_axisY(
-            titleColor="white", titleFontSize=12, labelColor="white", labelFontSize=12
+            titleColor="white", titleFontSize=10, labelColor="white", labelFontSize=8
         )
-        .configure_title(fontSize=20, color="white")
+        .configure_title(fontSize=13, color="white")
         .add_selection(click)
     )
 

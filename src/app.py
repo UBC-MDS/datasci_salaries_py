@@ -6,9 +6,12 @@ from dash.dependencies import Input, Output
 
 import sys
 
-sys.path.append("/app/")
+# sys.path.append("/app/")
 from .layout import *
 from .plot import *
+
+# from layout import *
+# from plot import *
 
 app = dash.Dash(
     __name__, external_stylesheets=[dbc.themes.BOOTSTRAP, "/css/button.css"]
@@ -21,7 +24,7 @@ app.layout = html.Div(
         dcc.Location(id="url", refresh=False),
         topbar,
         content,
-        sidebar,
+        # sidebar,
     ]
 )
 
