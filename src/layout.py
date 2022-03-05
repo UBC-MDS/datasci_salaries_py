@@ -147,7 +147,7 @@ content = dbc.Row(
                                     max=500000,
                                     value=[0, 500000],
                                     marks={
-                                        i: str(si_format(i, precision=1)) for i in range(0, 550_000, 80_000)
+                                        i: str(si_format(i, precision=0)) for i in range(0, 550_000, 50_000)
                                     },
                                 ),
                                 
