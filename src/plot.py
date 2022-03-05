@@ -91,7 +91,7 @@ def plot_gender_boxplot(xcon):
             color=alt.Color("GenderSelect", title="Gender"),
         )
         .configure_legend(orient="bottom")
-        .properties(title=f"Boxplot by gender in {xcon}", width=420, height=150)
+        .properties(title=f"Boxplot by gender in {xcon}", width=420, height=120)
         .interactive()
     )
 
@@ -134,7 +134,7 @@ def plot_edu_histo(xcon):
         .properties(
             title=f"Histogram of {xcon}",
             width=300,
-            height=160,
+            height=120,
         )
         .configure_axis(labelFontSize=12)
     )
@@ -189,7 +189,7 @@ def plot_map(xcon):
 
     chart = chart.properties(
         title=f"Median Salary of {xcon}",
-        width=550,
+        width=460,
         height=485,
     ).configure_axis(labelFontSize=10)
 

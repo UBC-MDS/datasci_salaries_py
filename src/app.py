@@ -4,9 +4,6 @@ from dash import dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 
-import sys
-
-# sys.path.append("/app/")
 from .layout import *
 from .plot import *
 

@@ -3,8 +3,8 @@ from dash import dcc
 import dash_bootstrap_components as dbc
 
 
-from .plot import *
-# from plot import *
+# from .plot import *
+from plot import *
 
 
 SIDEBAR_STYLE = {
@@ -171,7 +171,7 @@ content = dbc.Row(
                                     style={
                                         "border-width": "0",
                                         "width": "100%",
-                                        "height": "30vh",
+                                        "height": "32vh",
                                         "display": "block",
                                     },
                                 ),
@@ -185,7 +185,7 @@ content = dbc.Row(
                                     style={
                                         "border-width": "0",
                                         "width": "100%",
-                                        "height": "30vh",
+                                        "height": "32vh",
                                     },
                                 ),
                             ],
