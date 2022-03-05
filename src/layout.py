@@ -12,7 +12,7 @@ SIDEBAR_STYLE = {
     "top": "0rem",
     "right": 0,
     "bottom": 0,
-    "width": 400,
+    "width": 350,
     "padding": "2rem 0rem",
     "background-color": "#2C2C2C",
 }
@@ -113,7 +113,7 @@ content = dbc.Row(
                                 ],
                             ),
                         ],
-                        width=7,
+                        width=6,
                         style={"height": "3vh"},
                     ),
                     style={"height": "3vh"},
@@ -132,7 +132,7 @@ content = dbc.Row(
                                     },
                                 ),
                             ],
-                            width=7,
+                            width=6,
                         ),
                         
 
@@ -179,7 +179,7 @@ content = dbc.Row(
                                     },
                                 ),
                             ],
-                            width=7,
+                            width=6,
                         ),
                         dbc.Col(
                             [
