@@ -1,7 +1,7 @@
 from dash import html
 from dash import dcc
 import dash_bootstrap_components as dbc
-import si_format
+from si_prefix import si_format
 
 from .plot import *
 # from plot import *
