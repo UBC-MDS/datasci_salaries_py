@@ -128,7 +128,7 @@ def plot_edu_histo(xcon):
             x=alt.X("Salary_USD", axis=alt.Axis(format="~s"), bin=alt.Bin(maxbins=20), title="Salary in USD"),
             y=alt.Y("count()", title="Counts"),
             color=alt.Color(
-                "FormalEducation", sort=education_order, title="Education level", legend=alt.Legend(rows=2)
+                "FormalEducation", sort=education_order, title="Education level", legend=alt.Legend(columns=2)
             ),
             order=alt.Order("education_order:Q"),
         )
