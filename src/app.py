@@ -14,6 +14,7 @@ app = dash.Dash(
     __name__, external_stylesheets=[dbc.themes.BOOTSTRAP, "/css/button.css"]
 )
 
+app.title = "Data Science Salaries"
 server = app.server
 
 app.layout = html.Div(
