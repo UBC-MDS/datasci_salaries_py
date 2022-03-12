@@ -5,6 +5,15 @@ This project aims to build a dashboard to visualize data science salaries across
 
 Further details can be found in our proposal [here](https://github.com/UBC-MDS/datasci_salaries_py/blob/main/proposal.md).
 
+### Run the app locally
+
+To run this app using Docker write the following commands after cloning the repo:
+
+```bash
+cd datasci_salaries_py
+docker-compose up
+```
+Finally, open the app in the followin URL http://localhost:8000/
 
 ## The problem
 
