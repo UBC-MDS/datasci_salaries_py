@@ -2,8 +2,8 @@ import pandas as pd
 import altair as alt
 import geopandas as gpd
 
-
-data = pd.read_csv("/app/data/processed/cleaned_salaries.csv")
+data = pd.read_csv("data/processed/cleaned_salaries.csv")
+# data = pd.read_csv("/app/data/processed/cleaned_salaries.csv")
 # data = pd.read_csv("./data/processed/cleaned_salaries.csv")
 
 scale_plots = 0.8

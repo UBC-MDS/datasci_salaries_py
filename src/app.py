@@ -4,11 +4,11 @@ from dash import dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 
-from .layout import *
-from .plot import *
+# from .layout import *
+# from .plot import *
 
-# from layout import *
-# from plot import *
+from layout import *
+from plot import *
 
 app = dash.Dash(
     __name__, external_stylesheets=[dbc.themes.BOOTSTRAP, "/css/button.css"]

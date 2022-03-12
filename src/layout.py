@@ -3,8 +3,8 @@ from dash import dcc
 import dash_bootstrap_components as dbc
 from si_prefix import si_format
 
-from .plot import *
-# from plot import *
+# from .plot import *
+from plot import *
 
 
 SIDEBAR_STYLE = {
