@@ -51,9 +51,12 @@ def update(xcon):
     return plot_gender_boxplot(xcon)
 
 
-@app.callback(Output("edu_histogram", "srcDoc"), [Input("select-country", "value")])
-def update(xcon):
-    return plot_edu_histo(xcon)
+@app.callback(
+    Output("edu_histogram", "srcDoc"),
+    [Input("select-country", "value"),
+    Input("select-stacking", "value")])
+def update(xcon, stack):
+    return plot_edu_histo(xcon, stack)
 
 
 if __name__ == "__main__":

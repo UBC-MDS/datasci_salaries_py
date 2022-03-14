@@ -38,6 +38,11 @@ country_names = data["Country"].unique()
 country_names.sort()
 country_names = country_names  # ["World"] + list(country_names)
 
+remote_working = [
+    "Always", "Most of the time",
+    "Sometimes", "Rarely", "Never"
+    ]
+
 
 topbar = html.Div(
     [
@@ -103,6 +108,14 @@ content = dbc.Row(
                 dbc.Row(
                     dbc.Col(
                         [
+                            html.Iframe(
+                                    # srcDoc=plot_11(),
+                                    style={
+                                        "border-width": "0",
+                                        "width": "100%",
+                                        "height": "5vh",
+                                    },
+                                ),
                             dcc.Dropdown(
                                 id="select-country",
                                 placeholder='Please select a country',
@@ -203,6 +216,18 @@ content = dbc.Row(
                         ),
                         dbc.Col(
                             [
+                                html.H2("Select a feature to stack by:",                             
+                                        style={"color":"black", "font-size": "12px"}
+                                        ),
+                                dcc.Dropdown(
+                                id="select-stacking",
+                                placeholder='Please select a feature to stack by',
+                                value="FormalEducation",
+                                options=[
+                                    {"label": "Education level", "value": "FormalEducation"},
+                                    {"label": "Remote working frequency", "value": "RemoteWork"}
+                                    ],
+                                ),
                                 html.Iframe(
                                     id="edu_histogram",
                                     style={
@@ -212,7 +237,7 @@ content = dbc.Row(
                                     },
                                 ),
                             ],
-                            width=5,
+                            width=6,
                         ),
                     ]
                 ),
