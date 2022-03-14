@@ -237,7 +237,7 @@ content = dbc.Row(
                                     },
                                 ),
                             ],
-                            width=6,
+                            width=5,
                         ),
                     ]
                 ),
