@@ -30,7 +30,7 @@ TOPBAR_STYLE = {
 
 CONTENT_STYLE = {
     "margin-left": "0rem",
-    "margin-right": "3rem",
+    "margin-right": "0rem",
     "padding": "0rem 0rem",
 }
 
@@ -124,7 +124,6 @@ content = dbc.Row(
                             [
                              dbc.Row(
                                 html.Iframe(
-                                    # srcDoc=plot_11(),
                                     style={
                                         "border-width": "0",
                                         "width": "100%",
@@ -158,28 +157,40 @@ content = dbc.Row(
 
                         dbc.Col(
                             [
-                                html.H2("Select a salary range:",                             
-                                        style={"color":"black", "font-size": "12px"}
+                                dbc.Row(
+                                    [   
+                                        dbc.Col(
+                                            html.Iframe(
+                                                id="salary_heatmap",
+                                                # srcDoc=plot_13(DS_identity=['Yes', 'No', 'Sort of (Explain more)']),
+                                                style={
+                                                    "border-width": "0",
+                                                    "width": "100%",
+                                                    "height": "52vh",
+                                                },
+                                            ),
+                                            width=10,
                                         ),
-                                dcc.RangeSlider(
-                                    id="xslider_1",
-                                    min=0,
-                                    max=500000,
-                                    value=[0, 500000],
-                                    marks={
-                                        i: str(si_format(i, precision=0)).replace(" ", "") for i in range(0, 550_000, 50_000)
-                                    },
-                                ),
-                                
-                                html.Iframe(
-                                    id="salary_heatmap",
-                                    # srcDoc=plot_13(DS_identity=['Yes', 'No', 'Sort of (Explain more)']),
-                                    style={
-                                        "border-width": "0",
-                                        "width": "100%",
-                                        "height": "52vh",
-                                    },
-                                ),
+                                        dbc.Col(
+                                            [
+                                            html.H2("Zoom in on a salary range:",                             
+                                                    style={"color":"black", "font-size": "12px"}
+                                                    ),
+                                            dcc.RangeSlider(
+                                                id="xslider_1",
+                                                min=0,
+                                                max=500000,
+                                                value=[0, 500000],
+                                                marks={
+                                                    i: str(si_format(i, precision=0)).replace(" ", "") for i in range(0, 550_000, 100_000)
+                                                },
+                                                vertical=True,
+                                                verticalHeight=250
+                                            ),
+                                            ],
+                                        )
+                                    ]
+                                )
                             ],
                             width=5,
                         ),
