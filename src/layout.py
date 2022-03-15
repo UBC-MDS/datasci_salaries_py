@@ -38,6 +38,7 @@ country_names = data["Country"].unique()
 country_names.sort()
 country_names = country_names  # ["World"] + list(country_names)
 
+top_paying = top_paying_countries()
 
 topbar = html.Div(
     [
@@ -143,15 +144,16 @@ content = dbc.Row(
                                     },
                                 ),
                              ),
-                             dbc.Row(
-                                html.Iframe(
-                                    style={
-                                        "border-width": "0",
-                                        "width": "100%",
-                                        "height": "13vh",
-                                    },
-                                ),
-                             ),                            ],
+                             dbc.Row([
+                                html.H2(
+                                    "Top 5 paying countries by median salary:",                             
+                                        style={"color":"black", "font-size": "12px", "marginLeft": "35px"}
+                                        ),
+                                html.Ol(children=[html.Li(i) for i in top_paying],
+                                style={"color":"black", "font-size": "12px", "marginLeft": "50px"})
+                             ]
+                             ),
+                             ],
                             width=6,
                         ),
                         
