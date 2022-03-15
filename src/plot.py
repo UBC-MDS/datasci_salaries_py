@@ -16,12 +16,11 @@ def plot_salary_heatmap(xmax, xcon):
     if xcon is not None:
         source = source[source["Country"] == xcon]
     else:
-        xcon = 'the World'
-        
-    x_bin_num = max(int((source.shape[0]/6)**0.65), 6)
-    y_bin_num = max(int((source.shape[0]/6)**0.65), 6)   
-    
-        
+        xcon = "the World"
+
+    x_bin_num = max(int((source.shape[0] / 6) ** 0.65), 6)
+    y_bin_num = max(int((source.shape[0] / 6) ** 0.65), 6)
+
     chart = (
         alt.Chart(source)
         .mark_rect()
@@ -43,7 +42,7 @@ def plot_salary_heatmap(xmax, xcon):
         .properties(
             title=f"Heatmap of {xcon}",
             width=scale_plots * 300,
-            height=scale_plots* 200,
+            height=scale_plots * 200,
         )
     )
 
@@ -76,7 +75,7 @@ def plot_gender_boxplot(xcon):
     if xcon is not None:
         source = source[source["Country"] == xcon]
     else:
-        xcon = 'the World'
+        xcon = "the World"
 
     chart = (
         alt.Chart(source)
@@ -93,7 +92,11 @@ def plot_gender_boxplot(xcon):
             color=alt.Color("GenderSelect", title="Gender"),
         )
         .configure_legend(orient="bottom")
-        .properties(title=f"Boxplot by gender in {xcon}", width=scale_plots* 420, height=scale_plots * 120)
+        .properties(
+            title=f"Boxplot by gender in {xcon}",
+            width=scale_plots * 420,
+            height=scale_plots * 120,
+        )
         .interactive()
     )
 
@@ -109,16 +112,13 @@ def plot_edu_histo(xcon, stack):
         "Doctoral degree",
     ]
 
-    remote_order = [
-        "Always", "Most of the time",
-        "Sometimes", "Rarely", "Never"
-    ]
+    remote_order = ["Always", "Most of the time", "Sometimes", "Rarely", "Never"]
 
     source = data.copy()
     if xcon is not None:
         source = source.query("Country == @xcon")
     else:
-        xcon = 'the World'
+        xcon = "the World"
 
     if stack == "FormalEducation":
         for idx, i in enumerate(source["FormalEducation"]):
@@ -138,18 +138,26 @@ def plot_edu_histo(xcon, stack):
             alt.Chart(source)
             .mark_bar()
             .encode(
-                x=alt.X("Salary_USD", axis=alt.Axis(format="~s"), bin=alt.Bin(maxbins=20), title="Salary in USD"),
+                x=alt.X(
+                    "Salary_USD",
+                    axis=alt.Axis(format="~s"),
+                    bin=alt.Bin(maxbins=20),
+                    title="Salary in USD",
+                ),
                 y=alt.Y("count()", title="Counts"),
                 color=alt.Color(
-                    "FormalEducation", sort=education_order, title="Education level", legend=alt.Legend(columns=2)
+                    "FormalEducation",
+                    sort=education_order,
+                    title="Education level",
+                    legend=alt.Legend(columns=2),
                 ),
                 order=alt.Order("education_order:Q"),
             )
             .configure_legend(orient="bottom", titleFontSize=11, labelFontSize=11)
             .properties(
                 title=f"Histogram of {xcon}",
-                width=scale_plots*300,
-                height=scale_plots*120,
+                width=scale_plots * 300,
+                height=scale_plots * 120,
             )
             .configure_axis(labelFontSize=12)
         )
@@ -158,18 +166,26 @@ def plot_edu_histo(xcon, stack):
             alt.Chart(source)
             .mark_bar()
             .encode(
-                x=alt.X("Salary_USD", axis=alt.Axis(format="~s"), bin=alt.Bin(maxbins=20), title="Salary in USD"),
+                x=alt.X(
+                    "Salary_USD",
+                    axis=alt.Axis(format="~s"),
+                    bin=alt.Bin(maxbins=20),
+                    title="Salary in USD",
+                ),
                 y=alt.Y("count()", title="Counts"),
                 color=alt.Color(
-                    "RemoteWork", sort=remote_order, title="Remote working", legend=alt.Legend(columns=3)
+                    "RemoteWork",
+                    sort=remote_order,
+                    title="Remote working",
+                    legend=alt.Legend(columns=3),
                 ),
                 order=alt.Order("remote_order:Q"),
             )
             .configure_legend(orient="bottom", titleFontSize=11, labelFontSize=11)
             .properties(
                 title=f"Histogram of {xcon}",
-                width=scale_plots*300,
-                height=scale_plots*120,
+                width=scale_plots * 300,
+                height=scale_plots * 120,
             )
             .configure_axis(labelFontSize=12)
         )
@@ -191,11 +207,12 @@ def plot_map(xcon):
     source["Country"] = source["Country"].apply(lambda x: str.lower(x))
 
     datamap = pd.merge(world, source, how="left")
-    datamap['Salary_USD'] = datamap['Salary_USD'].fillna(0)
+    datamap["Salary_USD"] = datamap["Salary_USD"].fillna(0)
     datamap["Country"] = datamap["Country"].apply(lambda x: str.capitalize(x))
-    
+
     chart = (
-        alt.Chart(datamap).mark_geoshape(stroke='gray')
+        alt.Chart(datamap)
+        .mark_geoshape(stroke="gray")
         .project(type="mercator", scale=40, translate=[185, 120])
         .encode(
             color=alt.Color(
@@ -207,7 +224,7 @@ def plot_map(xcon):
                     labelFontSize=10,
                     symbolSize=10,
                     titleFontSize=10,
-                    format="~s"
+                    format="~s",
                 ),
             ),
             tooltip=["Country:N", "Salary_USD"],
@@ -221,7 +238,7 @@ def plot_map(xcon):
             opacity=alt.Opacity(field="alpha", type="quantitative", legend=None),
         )
     else:
-        xcon = 'the World'
+        xcon = "the World"
 
     chart = chart.properties(
         title=f"Median Salary of {xcon}",
@@ -245,7 +262,14 @@ def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.co
         DS_identity = list(DS_identity)
     df = df[df["DataScienceIdentitySelect"].isin(DS_identity)]
 
-    # alt.themes.enable("dark")
+    salary_order = (
+        df[["Country", "Salary_USD"]]
+        .groupby("Country")
+        .median()
+        .reset_index()
+        .sort_values(by="Salary_USD")["Country"]
+        .tolist()
+    )
 
     # Create Plot
     brush = alt.selection_interval()
@@ -255,7 +279,7 @@ def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.co
         alt.Chart(df, title="Interactive window for coding experience count")
         .mark_circle()
         .encode(
-            y=alt.Y("Country", title=None),
+            y=alt.Y("Country", title=None, sort=salary_order),
             x=alt.X("Salary_USD", axis=alt.Axis(format="~s"), title="Salary in USD"),
             color=alt.condition(
                 brush,
@@ -266,28 +290,32 @@ def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.co
             tooltip="EmployerIndustry",
         )
         .add_selection(brush)
-    ).properties(width=scale_plots*250, height=scale_plots*490)
+    ).properties(width=scale_plots * 250, height=scale_plots * 490)
 
     bars = (
-        alt.Chart(df, title="Click to filter the above plot!")
-        .mark_bar()
-        .encode(
-            x=alt.X("count()", title="Counts"),
-            y=alt.Y(
-                "Tenure",
-                title="Coding Experience",
-                sort=[
-                    "More than 10 years",
-                    "6 to 10 years",
-                    "3 to 5 years",
-                    "1 to 2 years",
-                    "Less than a year",
-                ],
-            ),
-            color="Tenure",
-            opacity=alt.condition(click, alt.value(0.9), alt.value(0.2)),
+        (
+            alt.Chart(df, title="Click to filter the above plot!")
+            .mark_bar()
+            .encode(
+                x=alt.X("count()", title="Counts"),
+                y=alt.Y(
+                    "Tenure",
+                    title="Coding Experience",
+                    sort=[
+                        "More than 10 years",
+                        "6 to 10 years",
+                        "3 to 5 years",
+                        "1 to 2 years",
+                        "Less than a year",
+                    ],
+                ),
+                color="Tenure",
+                opacity=alt.condition(click, alt.value(0.9), alt.value(0.2)),
+            )
         )
-    ).properties(width=scale_plots*250, height=scale_plots*100).transform_filter(brush)
+        .properties(width=scale_plots * 250, height=scale_plots * 100)
+        .transform_filter(brush)
+    )
 
     overall_plot = (
         alt.vconcat(points, bars, spacing=1)
@@ -307,7 +335,10 @@ def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.co
 
 def top_paying_countries():
     source = data.copy()
-    top_paying = (source[["Country", "Salary_USD"]]
-    .groupby("Country").median()
-    .sort_values(by="Salary_USD", ascending=False))
+    top_paying = (
+        source[["Country", "Salary_USD"]]
+        .groupby("Country")
+        .median()
+        .sort_values(by="Salary_USD", ascending=False)
+    )
     return list(top_paying.reset_index()["Country"][:5])
