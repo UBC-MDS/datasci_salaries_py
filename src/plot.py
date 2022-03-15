@@ -270,3 +270,11 @@ def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.co
     )
 
     return overall_plot.to_html()
+
+
+def top_paying_countries():
+    source = data.copy()
+    top_paying = (source[["Country", "Salary_USD"]]
+    .groupby("Country").median()
+    .sort_values(by="Salary_USD", ascending=False))
+    return list(top_paying.reset_index()["Country"][:5])
