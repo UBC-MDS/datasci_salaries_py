@@ -100,7 +100,7 @@ def plot_gender_boxplot(xcon):
     return chart.to_html()
 
 
-def plot_edu_histo(xcon):
+def plot_edu_histo(xcon, stack):
 
     education_order = [
         "Less than bachelor's degree",
@@ -109,37 +109,70 @@ def plot_edu_histo(xcon):
         "Doctoral degree",
     ]
 
+    remote_order = [
+        "Always", "Most of the time",
+        "Sometimes", "Rarely", "Never"
+    ]
+
     source = data.copy()
     if xcon is not None:
         source = source.query("Country == @xcon")
     else:
         xcon = 'the World'
 
-    for idx, i in enumerate(source["FormalEducation"]):
-        if i in education_order[1:]:
-            continue
-        else:
-            source["FormalEducation"].iloc[idx] = "Less than bachelor's degree"
+    if stack == "FormalEducation":
+        for idx, i in enumerate(source["FormalEducation"]):
+            if i in education_order[1:]:
+                continue
+            else:
+                source["FormalEducation"].iloc[idx] = "Less than bachelor's degree"
+    else:
+        for idx, i in enumerate(source["RemoteWork"]):
+            if i in remote_order[1:]:
+                continue
+            else:
+                source["RemoteWork"].iloc[idx] = "No data"
 
-    chart = (
-        alt.Chart(source)
-        .mark_bar()
-        .encode(
-            x=alt.X("Salary_USD", axis=alt.Axis(format="~s"), bin=alt.Bin(maxbins=20), title="Salary in USD"),
-            y=alt.Y("count()", title="Counts"),
-            color=alt.Color(
-                "FormalEducation", sort=education_order, title="Education level", legend=alt.Legend(columns=2)
-            ),
-            order=alt.Order("education_order:Q"),
+    if stack == "FormalEducation":
+        chart = (
+            alt.Chart(source)
+            .mark_bar()
+            .encode(
+                x=alt.X("Salary_USD", axis=alt.Axis(format="~s"), bin=alt.Bin(maxbins=20), title="Salary in USD"),
+                y=alt.Y("count()", title="Counts"),
+                color=alt.Color(
+                    "FormalEducation", sort=education_order, title="Education level", legend=alt.Legend(columns=2)
+                ),
+                order=alt.Order("education_order:Q"),
+            )
+            .configure_legend(orient="bottom", titleFontSize=11, labelFontSize=11)
+            .properties(
+                title=f"Histogram of {xcon}",
+                width=scale_plots*300,
+                height=scale_plots*120,
+            )
+            .configure_axis(labelFontSize=12)
         )
-        .configure_legend(orient="bottom", titleFontSize=11, labelFontSize=11)
-        .properties(
-            title=f"Histogram of {xcon}",
-            width=scale_plots*300,
-            height=scale_plots*120,
+    else:
+        chart = (
+            alt.Chart(source)
+            .mark_bar()
+            .encode(
+                x=alt.X("Salary_USD", axis=alt.Axis(format="~s"), bin=alt.Bin(maxbins=20), title="Salary in USD"),
+                y=alt.Y("count()", title="Counts"),
+                color=alt.Color(
+                    "RemoteWork", sort=remote_order, title="Remote working", legend=alt.Legend(columns=3)
+                ),
+                order=alt.Order("remote_order:Q"),
+            )
+            .configure_legend(orient="bottom", titleFontSize=11, labelFontSize=11)
+            .properties(
+                title=f"Histogram of {xcon}",
+                width=scale_plots*300,
+                height=scale_plots*120,
+            )
+            .configure_axis(labelFontSize=12)
         )
-        .configure_axis(labelFontSize=12)
-    )
 
     return chart.to_html()
 
