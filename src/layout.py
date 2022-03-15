@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 from si_prefix import si_format
 
 from .plot import *
+
 # from plot import *
 
 
@@ -39,10 +40,7 @@ country_names.sort()
 country_names = country_names  # ["World"] + list(country_names)
 
 
-remote_working = [
-    "Always", "Most of the time",
-    "Sometimes", "Rarely", "Never"
-    ]
+remote_working = ["Always", "Most of the time", "Sometimes", "Rarely", "Never"]
 
 top_paying = top_paying_countries()
 
@@ -75,15 +73,15 @@ sidebar = html.Div(
                 html.Div(
                     [
                         html.H2(
-                            "\rAre you a Data Scientist?",
+                            "\rType of Role",
                             style={"color": "white", "font-size": "14px"},
                         ),
                         dcc.Dropdown(
                             id="data_scientist",
                             options=[
-                                {"label": "Yes", "value": "Yes"},
-                                {"label": "No", "value": "No"},
-                                {"label": "Sort of", "value": "Sort of (Explain more)"},
+                                {"label": "Data Scientist", "value": "Yes"},
+                                {"label": "Not Data Scientist", "value": "No"},
+                                {"label": "Mixed", "value": "Sort of (Explain more)"},
                             ],
                             value=["Yes", "No", "Sort of (Explain more)"],
                             multi=True,
@@ -111,16 +109,16 @@ content = dbc.Row(
                     dbc.Col(
                         [
                             html.Iframe(
-                                    # srcDoc=plot_11(),
-                                    style={
-                                        "border-width": "0",
-                                        "width": "100%",
-                                        "height": "5vh",
-                                    },
-                                ),
+                                # srcDoc=plot_11(),
+                                style={
+                                    "border-width": "0",
+                                    "width": "100%",
+                                    "height": "5vh",
+                                },
+                            ),
                             dcc.Dropdown(
                                 id="select-country",
-                                placeholder='Please select a country',
+                                placeholder="Please select a country",
                                 value=None,
                                 options=[
                                     {"label": country, "value": country}
@@ -137,44 +135,53 @@ content = dbc.Row(
                     [
                         dbc.Col(
                             [
-                             dbc.Row(
-                                html.Iframe(
-                                    style={
-                                        "border-width": "0",
-                                        "width": "100%",
-                                        "height": "13vh",
-                                    },
+                                dbc.Row(
+                                    html.Iframe(
+                                        style={
+                                            "border-width": "0",
+                                            "width": "100%",
+                                            "height": "13vh",
+                                        },
+                                    ),
                                 ),
-                             ), 
-                             dbc.Row(
-                                html.Iframe(
-                                    id="world_map",
-                                    # srcDoc=plot_11(),
-                                    style={
-                                        "border-width": "0",
-                                        "width": "100%",
-                                        "height": "35vh",
-                                    },
+                                dbc.Row(
+                                    html.Iframe(
+                                        id="world_map",
+                                        # srcDoc=plot_11(),
+                                        style={
+                                            "border-width": "0",
+                                            "width": "100%",
+                                            "height": "35vh",
+                                        },
+                                    ),
                                 ),
-                             ),
-                             dbc.Row([
-                                html.H2(
-                                    "Top 5 paying countries by median salary:",                             
-                                        style={"color":"black", "font-size": "12px", "marginLeft": "35px"}
+                                dbc.Row(
+                                    [
+                                        html.H2(
+                                            "Top 5 paying countries by median salary:",
+                                            style={
+                                                "color": "black",
+                                                "font-size": "12px",
+                                                "marginLeft": "35px",
+                                            },
                                         ),
-                                html.Ol(children=[html.Li(i) for i in top_paying],
-                                style={"color":"black", "font-size": "12px", "marginLeft": "50px"})
-                             ]
-                             ),
-                             ],
+                                        html.Ol(
+                                            children=[html.Li(i) for i in top_paying],
+                                            style={
+                                                "color": "black",
+                                                "font-size": "12px",
+                                                "marginLeft": "50px",
+                                            },
+                                        ),
+                                    ]
+                                ),
+                            ],
                             width=6,
                         ),
-                        
-
                         dbc.Col(
                             [
                                 dbc.Row(
-                                    [   
+                                    [
                                         dbc.Col(
                                             html.Iframe(
                                                 id="salary_heatmap",
@@ -189,22 +196,31 @@ content = dbc.Row(
                                         ),
                                         dbc.Col(
                                             [
-                                            html.H2("Zoom in on a salary range:",                             
-                                                    style={"color":"black", "font-size": "12px"}
-                                                    ),
-                                            dcc.RangeSlider(
-                                                id="xslider_1",
-                                                min=0,
-                                                max=500000,
-                                                value=[0, 500000],
-                                                marks={
-                                                    i: str(si_format(i, precision=0)).replace(" ", "") for i in range(0, 550_000, 100_000)
-                                                },
-                                                vertical=True,
-                                                verticalHeight=250
-                                            ),
+                                                html.H2(
+                                                    "Zoom in on a salary range:",
+                                                    style={
+                                                        "color": "black",
+                                                        "font-size": "12px",
+                                                    },
+                                                ),
+                                                dcc.RangeSlider(
+                                                    id="xslider_1",
+                                                    min=0,
+                                                    max=500000,
+                                                    value=[0, 500000],
+                                                    marks={
+                                                        i: str(
+                                                            si_format(i, precision=0)
+                                                        ).replace(" ", "")
+                                                        for i in range(
+                                                            0, 550_000, 100_000
+                                                        )
+                                                    },
+                                                    vertical=True,
+                                                    verticalHeight=250,
+                                                ),
                                             ],
-                                        )
+                                        ),
                                     ]
                                 )
                             ],
@@ -230,16 +246,23 @@ content = dbc.Row(
                         ),
                         dbc.Col(
                             [
-                                html.H2("Select a feature to stack by:",                             
-                                        style={"color":"black", "font-size": "12px"}
-                                        ),
+                                html.H2(
+                                    "Select a feature to stack by:",
+                                    style={"color": "black", "font-size": "12px"},
+                                ),
                                 dcc.Dropdown(
-                                id="select-stacking",
-                                placeholder='Please select a feature to stack by',
-                                value="FormalEducation",
-                                options=[
-                                    {"label": "Education level", "value": "FormalEducation"},
-                                    {"label": "Remote working frequency", "value": "RemoteWork"}
+                                    id="select-stacking",
+                                    placeholder="Please select a feature to stack by",
+                                    value="FormalEducation",
+                                    options=[
+                                        {
+                                            "label": "Education level",
+                                            "value": "FormalEducation",
+                                        },
+                                        {
+                                            "label": "Remote working frequency",
+                                            "value": "RemoteWork",
+                                        },
                                     ],
                                 ),
                                 html.Iframe(
@@ -257,11 +280,10 @@ content = dbc.Row(
                 ),
             ]
         ),
-        
         dbc.Col(
             [sidebar],
             width=3,
-        )
+        ),
     ],
     style=CONTENT_STYLE,
 )
