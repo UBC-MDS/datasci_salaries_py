@@ -252,7 +252,6 @@ def plot_map(xcon):
 def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.copy()):
     # Clean data
     df = df.dropna(subset=["Salary_USD", "Tenure"])
-    df = df.query("Salary_USD < 400_000")
     df = df[df["Tenure"] != "I don't write code to analyze data"]
 
     # Filter data
