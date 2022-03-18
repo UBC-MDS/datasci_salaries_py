@@ -40,7 +40,7 @@ def plot_salary_heatmap(xmax, xcon):
         )
         .properties(
             title=f"Heatmap of {xcon}",
-            width=scale_plots * 380,
+            width=scale_plots * 280,
             height=scale_plots * 200,
         )
     )
