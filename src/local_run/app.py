@@ -47,7 +47,7 @@ def plot_salary_heatmap(xmax, xcon):
         )
         .properties(
             title=f"Heatmap of {xcon}",
-            width=scale_plots * 300,
+            width=scale_plots * 280,
             height=scale_plots * 200,
         )
     )
@@ -60,7 +60,7 @@ def plot_salary_heatmap(xmax, xcon):
             y=alt.Y("count()", title="Counts"),
         )
         .properties(
-            width=scale_plots * 300,
+            width=scale_plots * 280,
             height=scale_plots * 130,
         )
     )
@@ -457,28 +457,50 @@ content = dbc.Row(
                                 [
                                     dcc.Dropdown(
                                         id="select-country",
-                                        placeholder="Please select a country, and zoom salary range",
+                                        placeholder="Please select a country",
                                         value=None,
                                         options=[
                                             {"label": country, "value": country}
                                             for country in country_names
                                         ],
                                     ),
-                                    dcc.RangeSlider(
-                                        id="xslider_1",
-                                        min=0,
-                                        max=500000,
-                                        value=[0, 500000],
-                                        marks={
-                                            i: str(
-                                                si_format(i, precision=0)
-                                            ).replace(" ", "")
-                                            for i in range(
-                                                0, 550_000, 100_000
-                                            )
-                                        },
-                                        vertical=False,
-                                        allowCross=False,
+                                    dbc.Row(
+                                        html.Iframe(
+                                            # srcDoc=plot_11(),
+                                            style={
+                                                "border-width": "0",
+                                                "width": "100%",
+                                                "height": "10px",
+                                            },
+                                        )
+                                    ),
+                                    dbc.Row(                                            
+                                            [
+                                                dbc.Col(
+                                                    html.P("Salary range:"),
+                                                    style={"font-size": "14px"},
+                                                    width=3,
+                                                ), 
+                                                dbc.Col(
+                                                    dcc.RangeSlider(
+                                                        id="xslider_1",
+                                                        min=0,
+                                                        max=500000,
+                                                        value=[0, 500000],
+                                                        marks={
+                                                            i: str(
+                                                                si_format(i, precision=0)
+                                                            ).replace(" ", "")
+                                                            for i in range(
+                                                                0, 550_000, 100_000
+                                                            )
+                                                        },
+                                                        vertical=False,
+                                                        allowCross=False,
+                                                    )
+                                                )
+                                                
+                                            ]
                                     )
                                 ]
                             )
@@ -499,7 +521,7 @@ content = dbc.Row(
                                             style={
                                                 "border-width": "0",
                                                 "width": "100%",
-                                                "height": "45px",
+                                                "height": "65px",
                                             },
                                         ),
                                         html.Iframe(
@@ -547,7 +569,7 @@ content = dbc.Row(
                                                 style={
                                                     "border-width": "0",
                                                     "width": "100%",
-                                                    "height": "52vh",
+                                                    "height": "55vh",
                                                 },
                                             ),
                                             width=10,
