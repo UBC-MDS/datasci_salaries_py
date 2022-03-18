@@ -8,11 +8,10 @@ data = pd.read_csv("/app/data/processed/cleaned_salaries.csv")
 
 scale_plots = 0.8
 
-
 def plot_salary_heatmap(xmax, xcon):
 
     source = data.copy()
-    source = source[(source["Age"] > 0) & (source["Salary_USD"] <= xmax[1])]
+    source = source[(source["Age"] > 0) & (source["Salary_USD"] <= xmax[1]) & (source["Salary_USD"] >= xmax[0])]
     if xcon is not None:
         source = source[source["Country"] == xcon]
     else:
@@ -64,9 +63,10 @@ def plot_salary_heatmap(xmax, xcon):
     return fchart.to_html()
 
 
-def plot_gender_boxplot(xcon):
+def plot_gender_boxplot(xmax, xcon):
 
     source = data.copy()
+    source = source[(source["Age"] > 0) & (source["Salary_USD"] <= xmax[1]) & (source["Salary_USD"] >= xmax[0])]
     source = source.dropna(subset=["GenderSelect"])
     source["GenderSelect"] = source["GenderSelect"].replace(
         "Non-binary, genderqueer, or gender non-conforming", "A different identity"
@@ -103,7 +103,7 @@ def plot_gender_boxplot(xcon):
     return chart.to_html()
 
 
-def plot_edu_histo(xcon, stack):
+def plot_edu_histo(xmax, xcon, stack):
 
     education_order = [
         "Less than bachelor's degree",
@@ -115,6 +115,8 @@ def plot_edu_histo(xcon, stack):
     remote_order = ["Always", "Most of the time", "Sometimes", "Rarely", "Never"]
 
     source = data.copy()
+    source = source[(source["Age"] > 0) & (source["Salary_USD"] <= xmax[1]) & (source["Salary_USD"] >= xmax[0])]
+
     if xcon is not None:
         source = source.query("Country == @xcon")
     else:
@@ -341,3 +343,4 @@ def top_paying_countries():
         .sort_values(by="Salary_USD", ascending=False)
     )
     return list(top_paying.reset_index()["Country"][:5])
+

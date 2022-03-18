@@ -26,14 +26,16 @@ app.layout = html.Div(
     ]
 )
 
-
 @app.callback(Output("scatter", "srcDoc"), Input("data_scientist", "value"))
 def update(DS_identity):
     rst = plot_sidebar(DS_identity)
     return rst
 
 
-@app.callback(Output("world_map", "srcDoc"), [Input("select-country", "value")])
+@app.callback(
+    Output("world_map", "srcDoc"), 
+    [Input("select-country", "value")],
+)
 def update(xcon):
     return plot_map(xcon)
 
@@ -46,17 +48,24 @@ def update(xmax, xcon):
     return plot_salary_heatmap(xmax, xcon)
 
 
-@app.callback(Output("gender-boxplot", "srcDoc"), [Input("select-country", "value")])
-def update(xcon):
-    return plot_gender_boxplot(xcon)
+@app.callback(
+    Output("gender-boxplot", "srcDoc"),
+    [Input("xslider_1", "value"), Input("select-country", "value")],
+)
+def update(xmax, xcon):
+    return plot_gender_boxplot(xmax, xcon)
 
 
 @app.callback(
     Output("edu_histogram", "srcDoc"),
-    [Input("select-country", "value"),
-    Input("select-stacking", "value")])
-def update(xcon, stack):
-    return plot_edu_histo(xcon, stack)
+    [
+        Input("xslider_1", "value"),
+        Input("select-country", "value"),
+        Input("select-stacking", "value")
+    ]
+)
+def update(xmax, xcon, stack):
+    return plot_edu_histo(xmax, xcon, stack)
 
 
 if __name__ == "__main__":

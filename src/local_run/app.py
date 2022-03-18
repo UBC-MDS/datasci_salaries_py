@@ -18,16 +18,15 @@ scale_plots = 0.8
 def plot_salary_heatmap(xmax, xcon):
 
     source = data.copy()
-    source = source[(source["Age"] > 0) & (source["Salary_USD"] <= xmax[1])]
+    source = source[(source["Age"] > 0) & (source["Salary_USD"] <= xmax[1]) & (source["Salary_USD"] >= xmax[0])]
     if xcon is not None:
         source = source[source["Country"] == xcon]
     else:
-        xcon = 'the World'
-        
-    x_bin_num = max(int((source.shape[0]/6)**0.65), 6)
-    y_bin_num = max(int((source.shape[0]/6)**0.65), 6)   
-    
-        
+        xcon = "the World"
+
+    x_bin_num = max(int((source.shape[0] / 6) ** 0.65), 6)
+    y_bin_num = max(int((source.shape[0] / 6) ** 0.65), 6)
+
     chart = (
         alt.Chart(source)
         .mark_rect()
@@ -49,7 +48,7 @@ def plot_salary_heatmap(xmax, xcon):
         .properties(
             title=f"Heatmap of {xcon}",
             width=scale_plots * 300,
-            height=scale_plots* 200,
+            height=scale_plots * 200,
         )
     )
 
@@ -71,9 +70,10 @@ def plot_salary_heatmap(xmax, xcon):
     return fchart.to_html()
 
 
-def plot_gender_boxplot(xcon):
+def plot_gender_boxplot(xmax, xcon):
 
     source = data.copy()
+    source = source[(source["Age"] > 0) & (source["Salary_USD"] <= xmax[1]) & (source["Salary_USD"] >= xmax[0])]
     source = source.dropna(subset=["GenderSelect"])
     source["GenderSelect"] = source["GenderSelect"].replace(
         "Non-binary, genderqueer, or gender non-conforming", "A different identity"
@@ -82,7 +82,7 @@ def plot_gender_boxplot(xcon):
     if xcon is not None:
         source = source[source["Country"] == xcon]
     else:
-        xcon = 'the World'
+        xcon = "the World"
 
     chart = (
         alt.Chart(source)
@@ -99,14 +99,18 @@ def plot_gender_boxplot(xcon):
             color=alt.Color("GenderSelect", title="Gender"),
         )
         .configure_legend(orient="bottom")
-        .properties(title=f"Boxplot by gender in {xcon}", width=scale_plots* 420, height=scale_plots * 120)
+        .properties(
+            title=f"Boxplot by gender in {xcon}",
+            width=scale_plots * 420,
+            height=scale_plots * 120,
+        )
         .interactive()
     )
 
     return chart.to_html()
 
 
-def plot_edu_histo(xcon):
+def plot_edu_histo(xmax, xcon, stack):
 
     education_order = [
         "Less than bachelor's degree",
@@ -115,37 +119,85 @@ def plot_edu_histo(xcon):
         "Doctoral degree",
     ]
 
+    remote_order = ["Always", "Most of the time", "Sometimes", "Rarely", "Never"]
+
     source = data.copy()
+    source = source[(source["Age"] > 0) & (source["Salary_USD"] <= xmax[1]) & (source["Salary_USD"] >= xmax[0])]
+
     if xcon is not None:
         source = source.query("Country == @xcon")
     else:
-        xcon = 'the World'
+        xcon = "the World"
 
-    for idx, i in enumerate(source["FormalEducation"]):
-        if i in education_order[1:]:
-            continue
-        else:
-            source["FormalEducation"].iloc[idx] = "Less than bachelor's degree"
+    if stack == "FormalEducation":
+        for idx, i in enumerate(source["FormalEducation"]):
+            if i in education_order[1:]:
+                continue
+            else:
+                source["FormalEducation"].iloc[idx] = "Less than bachelor's degree"
+    else:
+        for idx, i in enumerate(source["RemoteWork"]):
+            if i in remote_order[1:]:
+                continue
+            else:
+                source["RemoteWork"].iloc[idx] = "No data"
 
-    chart = (
-        alt.Chart(source)
-        .mark_bar()
-        .encode(
-            x=alt.X("Salary_USD", axis=alt.Axis(format="~s"), bin=alt.Bin(maxbins=20), title="Salary in USD"),
-            y=alt.Y("count()", title="Counts"),
-            color=alt.Color(
-                "FormalEducation", sort=education_order, title="Education level", legend=alt.Legend(columns=2)
-            ),
-            order=alt.Order("education_order:Q"),
+    if stack == "FormalEducation":
+        chart = (
+            alt.Chart(source)
+            .mark_bar()
+            .encode(
+                x=alt.X(
+                    "Salary_USD",
+                    axis=alt.Axis(format="~s"),
+                    bin=alt.Bin(maxbins=20),
+                    title="Salary in USD",
+                ),
+                y=alt.Y("count()", title="Counts"),
+                color=alt.Color(
+                    "FormalEducation",
+                    sort=education_order,
+                    title="Education level",
+                    legend=alt.Legend(columns=2),
+                ),
+                order=alt.Order("education_order:Q"),
+            )
+            .configure_legend(orient="bottom", titleFontSize=11, labelFontSize=11)
+            .properties(
+                title=f"Histogram of {xcon}",
+                width=scale_plots * 300,
+                height=scale_plots * 120,
+            )
+            .configure_axis(labelFontSize=12)
         )
-        .configure_legend(orient="bottom", titleFontSize=11, labelFontSize=11)
-        .properties(
-            title=f"Histogram of {xcon}",
-            width=scale_plots*300,
-            height=scale_plots*120,
+    else:
+        chart = (
+            alt.Chart(source)
+            .mark_bar()
+            .encode(
+                x=alt.X(
+                    "Salary_USD",
+                    axis=alt.Axis(format="~s"),
+                    bin=alt.Bin(maxbins=20),
+                    title="Salary in USD",
+                ),
+                y=alt.Y("count()", title="Counts"),
+                color=alt.Color(
+                    "RemoteWork",
+                    sort=remote_order,
+                    title="Remote working",
+                    legend=alt.Legend(columns=3),
+                ),
+                order=alt.Order("remote_order:Q"),
+            )
+            .configure_legend(orient="bottom", titleFontSize=11, labelFontSize=11)
+            .properties(
+                title=f"Histogram of {xcon}",
+                width=scale_plots * 300,
+                height=scale_plots * 120,
+            )
+            .configure_axis(labelFontSize=12)
         )
-        .configure_axis(labelFontSize=12)
-    )
 
     return chart.to_html()
 
@@ -164,11 +216,12 @@ def plot_map(xcon):
     source["Country"] = source["Country"].apply(lambda x: str.lower(x))
 
     datamap = pd.merge(world, source, how="left")
-    datamap['Salary_USD'] = datamap['Salary_USD'].fillna(0)
+    datamap["Salary_USD"] = datamap["Salary_USD"].fillna(0)
     datamap["Country"] = datamap["Country"].apply(lambda x: str.capitalize(x))
-    
+
     chart = (
-        alt.Chart(datamap).mark_geoshape(stroke='gray')
+        alt.Chart(datamap)
+        .mark_geoshape(stroke="gray")
         .project(type="mercator", scale=40, translate=[185, 120])
         .encode(
             color=alt.Color(
@@ -180,7 +233,7 @@ def plot_map(xcon):
                     labelFontSize=10,
                     symbolSize=10,
                     titleFontSize=10,
-                    format="~s"
+                    format="~s",
                 ),
             ),
             tooltip=["Country:N", "Salary_USD"],
@@ -194,7 +247,7 @@ def plot_map(xcon):
             opacity=alt.Opacity(field="alpha", type="quantitative", legend=None),
         )
     else:
-        xcon = 'the World'
+        xcon = "the World"
 
     chart = chart.properties(
         title=f"Median Salary of {xcon}",
@@ -208,7 +261,6 @@ def plot_map(xcon):
 def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.copy()):
     # Clean data
     df = df.dropna(subset=["Salary_USD", "Tenure"])
-    df = df.query("Salary_USD < 400_000")
     df = df[df["Tenure"] != "I don't write code to analyze data"]
 
     # Filter data
@@ -218,7 +270,14 @@ def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.co
         DS_identity = list(DS_identity)
     df = df[df["DataScienceIdentitySelect"].isin(DS_identity)]
 
-    # alt.themes.enable("dark")
+    salary_order = (
+        df[["Country", "Salary_USD"]]
+        .groupby("Country")
+        .median()
+        .reset_index()
+        .sort_values(by="Salary_USD")["Country"]
+        .tolist()
+    )
 
     # Create Plot
     brush = alt.selection_interval()
@@ -228,7 +287,7 @@ def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.co
         alt.Chart(df, title="Interactive window for coding experience count")
         .mark_circle()
         .encode(
-            y=alt.Y("Country", title=None),
+            y=alt.Y("Country", title=None, sort=salary_order),
             x=alt.X("Salary_USD", axis=alt.Axis(format="~s"), title="Salary in USD"),
             color=alt.condition(
                 brush,
@@ -239,28 +298,32 @@ def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.co
             tooltip="EmployerIndustry",
         )
         .add_selection(brush)
-    ).properties(width=scale_plots*250, height=scale_plots*490)
+    ).properties(width=scale_plots * 250, height=scale_plots * 490)
 
     bars = (
-        alt.Chart(df, title="Click to filter the above plot!")
-        .mark_bar()
-        .encode(
-            x=alt.X("count()", title="Counts"),
-            y=alt.Y(
-                "Tenure",
-                title="Coding Experience",
-                sort=[
-                    "More than 10 years",
-                    "6 to 10 years",
-                    "3 to 5 years",
-                    "1 to 2 years",
-                    "Less than a year",
-                ],
-            ),
-            color="Tenure",
-            opacity=alt.condition(click, alt.value(0.9), alt.value(0.2)),
+        (
+            alt.Chart(df, title="Click to filter the above plot!")
+            .mark_bar()
+            .encode(
+                x=alt.X("count()", title="Counts"),
+                y=alt.Y(
+                    "Tenure",
+                    title="Coding Experience",
+                    sort=[
+                        "More than 10 years",
+                        "6 to 10 years",
+                        "3 to 5 years",
+                        "1 to 2 years",
+                        "Less than a year",
+                    ],
+                ),
+                color="Tenure",
+                opacity=alt.condition(click, alt.value(0.9), alt.value(0.2)),
+            )
         )
-    ).properties(width=scale_plots*250, height=scale_plots*100).transform_filter(brush)
+        .properties(width=scale_plots * 250, height=scale_plots * 100)
+        .transform_filter(brush)
+    )
 
     overall_plot = (
         alt.vconcat(points, bars, spacing=1)
@@ -276,6 +339,18 @@ def plot_sidebar(DS_identity=["Yes", "No", "Sort of (Explain more)"], df=data.co
     )
 
     return overall_plot.to_html()
+
+
+def top_paying_countries():
+    source = data.copy()
+    top_paying = (
+        source[["Country", "Salary_USD"]]
+        .groupby("Country")
+        .median()
+        .sort_values(by="Salary_USD", ascending=False)
+    )
+    return list(top_paying.reset_index()["Country"][:5])
+
 
 
 SIDEBAR_STYLE = {
@@ -301,7 +376,7 @@ TOPBAR_STYLE = {
 
 CONTENT_STYLE = {
     "margin-left": "0rem",
-    "margin-right": "3rem",
+    "margin-right": "0rem",
     "padding": "0rem 0rem",
 }
 
@@ -309,6 +384,10 @@ country_names = data["Country"].unique()
 country_names.sort()
 country_names = country_names  # ["World"] + list(country_names)
 
+
+remote_working = ["Always", "Most of the time", "Sometimes", "Rarely", "Never"]
+
+top_paying = top_paying_countries()
 
 topbar = html.Div(
     [
@@ -339,15 +418,15 @@ sidebar = html.Div(
                 html.Div(
                     [
                         html.H2(
-                            "\rAre you a Data Scientist?",
+                            "\rType of Role",
                             style={"color": "white", "font-size": "14px"},
                         ),
                         dcc.Dropdown(
                             id="data_scientist",
                             options=[
-                                {"label": "Yes", "value": "Yes"},
-                                {"label": "No", "value": "No"},
-                                {"label": "Sort of", "value": "Sort of (Explain more)"},
+                                {"label": "Data Scientist", "value": "Yes"},
+                                {"label": "Not Data Scientist", "value": "No"},
+                                {"label": "Mixed", "value": "Sort of (Explain more)"},
                             ],
                             value=["Yes", "No", "Sort of (Explain more)"],
                             multi=True,
@@ -374,18 +453,38 @@ content = dbc.Row(
                 dbc.Row(
                     dbc.Col(
                         [
-                            dcc.Dropdown(
-                                id="select-country",
-                                placeholder='Please select a country',
-                                value=None,
-                                options=[
-                                    {"label": country, "value": country}
-                                    for country in country_names
-                                ],
-                            ),
+                            html.Div(
+                                [
+                                    dcc.Dropdown(
+                                        id="select-country",
+                                        placeholder="Please select a country, and zoom salary range",
+                                        value=None,
+                                        options=[
+                                            {"label": country, "value": country}
+                                            for country in country_names
+                                        ],
+                                    ),
+                                    dcc.RangeSlider(
+                                        id="xslider_1",
+                                        min=0,
+                                        max=500000,
+                                        value=[0, 500000],
+                                        marks={
+                                            i: str(
+                                                si_format(i, precision=0)
+                                            ).replace(" ", "")
+                                            for i in range(
+                                                0, 550_000, 100_000
+                                            )
+                                        },
+                                        vertical=False,
+                                        allowCross=False,
+                                    )
+                                ]
+                            )
                         ],
                         width=6,
-                        style={"height": "3vh"},
+                        # style={"height": "3vh"},
                     ),
                     style={"height": "3vh"},
                 ),
@@ -393,64 +492,68 @@ content = dbc.Row(
                     [
                         dbc.Col(
                             [
-                             dbc.Row(
-                                html.Iframe(
-                                    # srcDoc=plot_11(),
-                                    style={
-                                        "border-width": "0",
-                                        "width": "100%",
-                                        "height": "13vh",
-                                    },
+                                dbc.Row(
+                                    [
+                                        html.Iframe(
+                                            # srcDoc=plot_11(),
+                                            style={
+                                                "border-width": "0",
+                                                "width": "100%",
+                                                "height": "45px",
+                                            },
+                                        ),
+                                        html.Iframe(
+                                            id="world_map",
+                                            # srcDoc=plot_11(),
+                                            style={
+                                                "border-width": "0",
+                                                "width": "100%",
+                                                "height": "32vh",
+                                            },
+                                        )   
+                                    ]
                                 ),
-                             ), 
-                             dbc.Row(
-                                html.Iframe(
-                                    id="world_map",
-                                    # srcDoc=plot_11(),
-                                    style={
-                                        "border-width": "0",
-                                        "width": "100%",
-                                        "height": "35vh",
-                                    },
+                                dbc.Row(
+                                    [
+                                        html.H2(
+                                            "Top 5 paying countries by median salary:",
+                                            style={
+                                                "color": "black",
+                                                "font-size": "12px",
+                                                "marginLeft": "35px",
+                                            },
+                                        ),
+                                        html.Ol(
+                                            children=[html.Li(i) for i in top_paying],
+                                            style={
+                                                "color": "black",
+                                                "font-size": "12px",
+                                                "marginLeft": "50px",
+                                            },
+                                        ),
+                                    ]
                                 ),
-                             ),
-                             dbc.Row(
-                                html.Iframe(
-                                    style={
-                                        "border-width": "0",
-                                        "width": "100%",
-                                        "height": "13vh",
-                                    },
-                                ),
-                             ),                            ],
+                            ],
                             width=6,
                         ),
-                        
-
                         dbc.Col(
                             [
-                                html.H2("Select a salary range:",                             
-                                        style={"color":"black", "font-size": "12px"}
+                                dbc.Row(
+                                    [
+                                        dbc.Col(
+                                            html.Iframe(
+                                                id="salary_heatmap",
+                                                # srcDoc=plot_13(DS_identity=['Yes', 'No', 'Sort of (Explain more)']),
+                                                style={
+                                                    "border-width": "0",
+                                                    "width": "100%",
+                                                    "height": "52vh",
+                                                },
+                                            ),
+                                            width=10,
                                         ),
-                                dcc.RangeSlider(
-                                    id="xslider_1",
-                                    min=0,
-                                    max=500000,
-                                    value=[0, 500000],
-                                    marks={
-                                        i: str(si_format(i, precision=0)).replace(" ", "") for i in range(0, 550_000, 50_000)
-                                    },
-                                ),
-                                
-                                html.Iframe(
-                                    id="salary_heatmap",
-                                    # srcDoc=plot_13(DS_identity=['Yes', 'No', 'Sort of (Explain more)']),
-                                    style={
-                                        "border-width": "0",
-                                        "width": "100%",
-                                        "height": "52vh",
-                                    },
-                                ),
+                                    ]
+                                )
                             ],
                             width=5,
                         ),
@@ -460,6 +563,15 @@ content = dbc.Row(
                     [
                         dbc.Col(
                             [
+                                html.Iframe(
+                                    # srcDoc=plot_11(),
+                                    style={
+                                        "border-width": "0",
+                                        "width": "100%",
+                                        "height": "30px",
+                                    },
+                                ),
+                                
                                 html.Iframe(
                                     id="gender-boxplot",
                                     style={
@@ -474,6 +586,21 @@ content = dbc.Row(
                         ),
                         dbc.Col(
                             [
+                                dcc.Dropdown(
+                                    id="select-stacking",
+                                    placeholder="Please select a feature to stack by",
+                                    value="FormalEducation",
+                                    options=[
+                                        {
+                                            "label": "Education level",
+                                            "value": "FormalEducation",
+                                        },
+                                        {
+                                            "label": "Remote working frequency",
+                                            "value": "RemoteWork",
+                                        },
+                                    ],
+                                ),
                                 html.Iframe(
                                     id="edu_histogram",
                                     style={
@@ -489,11 +616,10 @@ content = dbc.Row(
                 ),
             ]
         ),
-        
         dbc.Col(
             [sidebar],
             width=3,
-        )
+        ),
     ],
     style=CONTENT_STYLE,
 )
@@ -521,7 +647,10 @@ def update(DS_identity):
     return rst
 
 
-@app.callback(Output("world_map", "srcDoc"), [Input("select-country", "value")])
+@app.callback(
+    Output("world_map", "srcDoc"), 
+    [Input("select-country", "value")],
+)
 def update(xcon):
     return plot_map(xcon)
 
@@ -534,14 +663,24 @@ def update(xmax, xcon):
     return plot_salary_heatmap(xmax, xcon)
 
 
-@app.callback(Output("gender-boxplot", "srcDoc"), [Input("select-country", "value")])
-def update(xcon):
-    return plot_gender_boxplot(xcon)
+@app.callback(
+    Output("gender-boxplot", "srcDoc"),
+    [Input("xslider_1", "value"), Input("select-country", "value")],
+)
+def update(xmax, xcon):
+    return plot_gender_boxplot(xmax, xcon)
 
 
-@app.callback(Output("edu_histogram", "srcDoc"), [Input("select-country", "value")])
-def update(xcon):
-    return plot_edu_histo(xcon)
+@app.callback(
+    Output("edu_histogram", "srcDoc"),
+    [
+        Input("xslider_1", "value"),
+        Input("select-country", "value"),
+        Input("select-stacking", "value")
+    ]
+)
+def update(xmax, xcon, stack):
+    return plot_edu_histo(xmax, xcon, stack)
 
 
 if __name__ == "__main__":
