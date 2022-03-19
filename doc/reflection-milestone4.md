@@ -13,7 +13,7 @@ The main theme in the feedbacks recieved from project reviews was about finetuni
 - Sorted highest paying countries based on median to provide an overall sense of higher paying countries.  
 - Replaced `education_level` with `remote_work` in the histogram.
 - Made salary range vertical for heatmap to increase legibility for the plot and separate it visually from the rest of the plots.  
-- Added top 5 highest paying countries based on median as a text box  .
+- Added top 5 highest paying countries based on median as a text box.
 - Made the dropdown title of sidebar more intuitive.  
 - Moved salary range bar above the map to show that it is a global parameter controlling the whole dashboard.
 
