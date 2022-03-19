@@ -11,7 +11,7 @@ The user is able to select a specific country by using a dropdown menu (top left
 The main theme in the feedbacks recieved from project reviews was about finetuning the details and the design of the dashboard. The relevant ones incorporated in the current iteration for both python and R dashboards are:  
 
 - Sorted highest paying countries based on median to provide an overall sense of higher paying countries.  
-- Replaced `education_level` with `remote_work` in the histogram.
+- Replaced `tenure` with `remote_work` in the histogram.
 - Made salary range vertical for heatmap to increase legibility for the plot and separate it visually from the rest of the plots.  
 - Added top 5 highest paying countries based on median as a text box.
 - Made the dropdown title of sidebar more intuitive.  
