@@ -5,17 +5,18 @@ This project aims to build a dashboard to visualize data science salaries across
 
 Further details can be found in our proposal [here](https://github.com/UBC-MDS/datasci_salaries_py/blob/main/proposal.md).
 
-### Run the app locally
+## Run the app locally
 
-To run this app using Docker write the following commands after cloning the repo:
+To run this app using Docker, run the following commands after cloning the repository:
 
 ```bash
 cd datasci_salaries_py
 docker-compose up
 ```
-Finally, open the app in the followin URL http://localhost:8000/
 
-## The problem
+Finally, open the app in the following URL: http://localhost:8000/
+
+## Problem
 
 The knowledge gap over salaries in the field of data science has been one of the challenges for graduates with different education levels around the world. Understanding the salary levels can help keep appropriate expectations for people who are considering getting into the field or seeking related jobs. To achieve this purpose, we plan to build an application which provides reliable information and visualizations of data science salary levels around the world for those who need it.
 
